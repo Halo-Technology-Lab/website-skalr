@@ -1,6 +1,5 @@
 import { CallLink } from '@/components/ui/CallLink';
 import { MediaPlaceholder } from '@/components/ui/MediaPlaceholder';
-import { PhoneIcon } from '@/components/ui/PhoneIcon';
 import { finalCta, FORM_ANCHOR, location } from '@/lib/content';
 
 /**
@@ -31,7 +30,7 @@ export function ClosingBand() {
               the provider to the CSP frame-src when you do. */}
           <MediaPlaceholder
             label={location.mapLabel}
-            className="mt-2.5 h-24 md:h-auto"
+            className="mt-2 h-24 md:h-auto"
             aspect="md:aspect-[16/9]"
           />
 
@@ -57,11 +56,10 @@ export function ClosingBand() {
             </a>
             <CallLink
               source="final-cta"
-              className="btn-alt mt-2.5 gap-2 lg:mt-8"
+              className="btn-alt mt-2.5 lg:mt-8"
               label={finalCta.secondary}
             >
               {finalCta.secondary}
-              <PhoneIcon className="h-4 w-4" />
             </CallLink>
           </div>
         </div>

@@ -31,7 +31,7 @@ export function Hero() {
         {hero.trust.map((item) => (
           <li
             key={item}
-            className="border border-line bg-white p-2 text-center text-micro font-semibold leading-snug text-ink lg:p-3 md:text-caption"
+            className="border border-line bg-white p-2 text-center text-micro font-semibold leading-[1.35] text-ink md:text-caption lg:p-3"
           >
             {item}
           </li>

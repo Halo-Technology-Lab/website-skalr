@@ -18,10 +18,10 @@ export function HowItWorks() {
 
       <ol className="mt-3 lg:mt-10 lg:grid lg:grid-cols-3 lg:gap-8">
         {howItWorks.steps.map((step, index) => (
-          <li key={step.title} className="mb-3 flex gap-2.5 last:mb-0 lg:mb-0 lg:block">
+          <li key={step.title} className="mb-[13px] flex gap-[11px] last:mb-0 lg:mb-0 lg:block">
             <span
               aria-hidden="true"
-              className="flex h-[25px] w-[25px] flex-none items-center justify-center rounded-full bg-accent-soft text-micro font-extrabold text-accent-ink lg:h-9 lg:w-9 md:text-body-lg"
+              className="flex h-[25px] w-[25px] flex-none items-center justify-center rounded-full bg-accent-soft text-[11px] font-extrabold text-accent-ink lg:h-9 lg:w-9 md:text-body-lg"
             >
               {index + 1}
             </span>

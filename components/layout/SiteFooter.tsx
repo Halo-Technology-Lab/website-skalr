@@ -10,19 +10,26 @@ export function SiteFooter() {
   const { legalName, privacyUrl } = siteConfig.clinic;
 
   return (
-    <footer className="bg-ink px-[18px] py-5 text-[10px] leading-relaxed text-[#B8B2AA] lg:px-8 lg:py-10 md:text-caption">
-      <div className="mx-auto max-w-page space-y-2">
-        <p>{footer.legal}</p>
-        {legalName && privacyUrl ? (
-          <p>
-            {legalName}.{' '}
-            <a href={privacyUrl} className="underline underline-offset-2 hover:text-white">
-              Privacy policy
-            </a>
-          </p>
-        ) : (
-          <p className="text-[#8E8880]">{footer.placeholder}</p>
-        )}
+    <footer className="bg-ink p-[18px] text-[10px] leading-[1.6] text-[#B8B2AA] md:text-caption lg:px-8 lg:py-10">
+      {/* One paragraph, as drawn: the legal lines and the outstanding-details
+          placeholder run on together rather than stacking. */}
+      <div className="mx-auto max-w-page">
+        <p>
+          {footer.legal}{' '}
+          {legalName && privacyUrl ? (
+            <>
+              {legalName}.{' '}
+              <a
+                href={privacyUrl}
+                className="underline underline-offset-2 hover:text-white"
+              >
+                Privacy policy
+              </a>
+            </>
+          ) : (
+            <span className="text-[#8E8880]">{footer.placeholder}</span>
+          )}
+        </p>
       </div>
     </footer>
   );

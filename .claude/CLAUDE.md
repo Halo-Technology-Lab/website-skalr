@@ -73,6 +73,12 @@ lib/
   column how-it-works, the sticky form card, and the closing band.
 - Minimum 44px tap targets on anything tappable. Form inputs are 16px on mobile
   or iOS Safari zooms the viewport on focus.
+- Toasts live in `components/ui/Toast.tsx`: a `useToasts` hook plus a
+  `ToastViewport`, no provider and no dependency. Toasts are keyed by id so a
+  repeat replaces rather than stacks, and they announce politely because the
+  form already moves focus to the first invalid field. They are a supplement to
+  inline field errors, never a replacement - a toast that has timed out cannot
+  tell anyone what is still wrong.
 - Two colour tokens are a shade darker than the wireframe (`accent-ink`,
   `muted`) because the originals fail WCAG AA for small text, and they carry the
   legal micro-copy. Reasoning is in the `tailwind.config.js` header.

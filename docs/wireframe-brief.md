@@ -58,25 +58,62 @@ All implemented in `sections/CallbackForm` and `app/api/lead/route.ts`:
 
 Each of these departs from the drawing. Say the word and any can be reverted.
 
+Mobile geometry was matched by diffing computed styles against the wireframe's
+own rendered phone frame, element by element. Heights are identical for the
+header, hero, trust tiles, buttons, chips, form fields, price cards, steps,
+suitability cards, FAQ rows, placeholders and footer.
+
 1. **Chips are not pre-selected.** The wireframe shows "Firmness and lift" and
    "Afternoon" in the selected state. Pre-selecting them would record a default
    answer for anyone who does not tap, which corrupts the qualification data the
    call team relies on, and it removes the engagement step the wireframe says
    lifts completion. Both questions are required instead.
-2. **Two colour tokens darkened.** The wireframe accent (`#8C6B4F`) is 4.4:1 on
+2. **Chip text is darker and bolder than drawn**, at the client's request:
+   `#1A1A1A` unselected rather than `#4A4A4A`, and weight 700 selected rather
+   than 600. Box geometry is the wireframe's exactly.
+3. **Two colour tokens darkened.** The wireframe accent (`#8C6B4F`) is 4.4:1 on
    the soft background and its muted grey (`#8A8279`) is 3.8:1 on white, both
    below WCAG AA for small text. They carry the legal and compliance micro-copy,
    so `accent-ink` (`#7A5C42`) and `muted` (`#6E675F`) are used for text. The
-   original tones remain for borders.
-3. **Form inputs are 16px on mobile**, not the 12px drawn. Anything smaller makes
+   original tones remain for borders and for the logo placeholder.
+4. **Form inputs are 16px on mobile**, not the 12px drawn. Anything smaller makes
    iOS Safari zoom the viewport on focus, which throws the visitor out of the
-   form mid-entry.
-4. **A typographic breakpoint at 768px.** The wireframe draws one mobile frame
+   form mid-entry. Padding and line-height are tuned so the box still lands
+   within 2px of the drawn 42px.
+5. **Tap targets are extended invisibly, not by inflating boxes.** The drawn chip
+   is 35px and the header call link 17px, both below a comfortable thumb target.
+   Rather than growing them, a transparent `::after` extends the tappable area
+   to 41px and 45px, so the visual matches the wireframe and the page still
+   works with a thumb. Everything else already meets 44px.
+6. **A typographic breakpoint at 768px.** The wireframe draws one mobile frame
    and one desktop layout. Between them, 13px copy across a full tablet width is
    unreadable, so `md` raises the type scale and caps the measure while the
    layout stays single column until `lg`.
-5. **An API route exists.** The scaffold was scoped as static-only, but the form
+7. **The FAQ is a real accordion.** The wireframe draws six closed rows plus a
+   separate box demonstrating an open answer, because a static mockup cannot
+   show interaction. The build renders one accordion with the first item open.
+8. **`.micro` keeps its 8px top margin.** The wireframe's own `.micro` class
+   declares `margin-top: 8px`, but a `.screen p { margin: 0 }` rule in the mockup
+   overrides it, so the rendered brief has none. The declared intent is used.
+9. **An API route exists.** The scaffold was scoped as static-only, but the form
    has to post somewhere. `app/api/lead/route.ts` is the only server code.
+
+## Additions beyond the wireframe
+
+**Toasts on the call back form**, requested after the first build. Pressing
+submit with anything missing raises a warning toast; a successful send raises a
+success toast; a failed send raises an error toast.
+
+The inline field errors and the confirmation panel both stay. A toast is
+transient, so it cannot be the only place a visitor is told what is wrong, and
+the wireframe's requirement to "show a confirmation that repeats the promise" is
+not something that should disappear after seven seconds. The toast is the
+attention-getter; the inline errors and the panel are the record.
+
+With one field wrong, the toast carries that field's own message. With several,
+it carries the count and the inline errors say which. A failed send also leaves
+a persistent block above the button, because a visitor may act on it minutes
+later.
 
 ## Outstanding, from section 07
 
@@ -89,8 +126,9 @@ Nothing below is invented in the build; each renders as a visible placeholder.
 2. **Founding places closing date** - `[TO CONFIRM]` in the offer micro-copy.
    Drop the sentence if the deadline is not real.
 3. **Consented, unretouched before and after pack.** `beforeAfter.imagePackApproved`
-   in `lib/content.ts` is `false`, and the section renders a hold notice. Flip it
-   only once the pack is signed off, and remove the notice.
+   in `lib/content.ts` is `false`, so the caption carries the wireframe's "Do not
+   publish until the consent and image pack is signed off" sentence. Flip it once
+   the pack is signed off and the sentence drops away on its own.
 4. **Practitioner name and registration** - the "Who carries out the treatment?"
    answer.
 5. **Clinic legal name, registration and privacy policy link** - footer, and

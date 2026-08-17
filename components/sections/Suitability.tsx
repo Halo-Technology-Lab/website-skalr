@@ -15,13 +15,14 @@ export function Suitability() {
         {suitability.heading}
       </h2>
 
-      <div className="mt-3 grid gap-2.5 lg:mx-auto lg:mt-10 lg:max-w-4xl lg:grid-cols-2 lg:gap-6">
+      <div className="mt-2 grid gap-[9px] lg:mx-auto lg:mt-10 lg:max-w-4xl lg:grid-cols-2 lg:gap-6">
         {suitability.columns.map((column) => (
-          <div key={column.title} className="border border-line bg-white p-3 lg:p-6">
-            <h3 className="mb-1.5 text-caption font-bold text-ink md:text-h3">
+          <div key={column.title} className="border border-line bg-white p-[11px] lg:p-6">
+            {/* The heading sits in its own bordered box inside the card, as drawn. */}
+            <h3 className="mb-[5px] border border-line bg-white p-[11px] text-caption font-bold text-ink md:text-h3 lg:mb-3 lg:p-4">
               {column.title}
             </h3>
-            <p className="text-micro md:text-lead">{column.body}</p>
+            <p className="text-chip md:text-lead">{column.body}</p>
           </div>
         ))}
       </div>

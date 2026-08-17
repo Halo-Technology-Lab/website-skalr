@@ -47,29 +47,31 @@
      44px minimum tap target throughout, per the wireframe build notes. */
 
   .btn {
-    @apply flex min-h-[48px] w-full items-center justify-center rounded-md bg-ink px-5
-           py-3.5 text-center text-body-lg font-bold text-white
+    @apply flex min-h-[48px] w-full items-center justify-center rounded-md bg-ink p-3.5
+           text-center text-body-lg font-bold text-white
            transition-colors duration-150 hover:bg-black
            disabled:cursor-not-allowed disabled:opacity-70;
   }
 
   .btn-alt {
     @apply flex min-h-[48px] w-full items-center justify-center rounded-md border-[1.5px]
-           border-ink bg-white px-5 py-3.5 text-center text-body-lg font-bold text-ink
+           border-ink bg-white p-3.5 text-center text-body-lg font-bold text-ink
            transition-colors duration-150 hover:bg-soft;
   }
 
   /* ---- Form controls ------------------------------------------------ */
 
   .field-label {
-    @apply mb-1.5 block text-micro font-bold text-ink md:text-caption;
+    @apply mb-[5px] block text-[11px] font-bold leading-[1.5] text-ink;
   }
 
   .field-input {
-    /* 16px on mobile is deliberate: anything smaller makes iOS Safari zoom the
-       viewport on focus, which throws the visitor out of the form. */
-    @apply block min-h-[48px] w-full rounded-[5px] border border-field bg-white px-3
-           py-2.5 text-[16px] text-ink placeholder:text-muted
+    /* Wireframe geometry is 11px padding on a 12px font. The font is raised to
+       16px here and only here: anything smaller makes iOS Safari zoom the
+       viewport on focus, which throws the visitor out of the form mid-entry.
+       The tightened line-height keeps the box close to the drawn 42px. */
+    @apply block w-full rounded-[5px] border border-field bg-white p-[11px]
+           text-[16px] leading-[1.25] text-ink placeholder:text-muted
            focus:border-ink md:text-lead;
   }
 
@@ -78,7 +80,7 @@
   }
 
   .field-hint {
-    @apply mt-1.5 text-micro text-muted;
+    @apply mt-1 text-hint text-muted;
   }
 
   .field-error {
@@ -86,15 +88,26 @@
   }
 
   /* Tap chips are real radio inputs; the input is visually hidden and the
-     label carries the styling, so keyboard and screen reader use is unchanged. */
+     label carries the styling, so keyboard and screen reader use is unchanged.
+     Box geometry is the wireframe's exactly: 11.5px text, 8px/12px padding,
+     16px radius, 35px tall. */
   .chip {
-    @apply flex min-h-[44px] cursor-pointer items-center rounded-2xl border border-field
-           bg-white px-3.5 py-2 text-caption text-copy transition-colors duration-150
+    @apply relative flex cursor-pointer items-center rounded-2xl border border-field
+           bg-white px-3 py-2 text-chip text-ink transition-colors duration-150
            hover:border-ink/40;
   }
 
+  /* The drawn chip is 35px, below a comfortable thumb target. This extends the
+     tappable area to 41px without changing the visual box - the 6px row gap is
+     exactly consumed, so neighbouring rows never overlap. */
+  .chip::after {
+    content: '';
+    position: absolute;
+    inset: -3px 0;
+  }
+
   .chip-input:checked + .chip {
-    @apply border-ink bg-ink font-semibold text-white;
+    @apply border-ink bg-ink font-bold text-white;
   }
 
   .chip-input:focus-visible + .chip {
@@ -105,13 +118,13 @@
 
   .media-placeholder {
     @apply flex items-center justify-center border border-line bg-placeholder p-2
-           text-center text-[10px] uppercase tracking-[1px] text-muted;
+           text-center text-[10px] uppercase tracking-[1px] text-[#989086];
   }
 
   /* ---- Section furniture -------------------------------------------- */
 
   .eyebrow {
-    @apply mb-2 block text-eyebrow font-bold uppercase text-accent-ink;
+    @apply mb-[9px] block text-eyebrow font-bold uppercase text-accent-ink;
   }
 
   .section-heading {

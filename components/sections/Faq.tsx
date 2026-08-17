@@ -27,7 +27,7 @@ export function Faq() {
             open={index === 0}
             className="group border-b border-line"
           >
-            <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-2.5 py-2.5 text-caption font-semibold text-ink marker:content-none lg:py-4 md:text-lead">
+            <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-2.5 py-[11px] text-question font-semibold text-ink marker:content-none md:text-lead lg:py-4">
               {item.question}
               <span
                 aria-hidden="true"

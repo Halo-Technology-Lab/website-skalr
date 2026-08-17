@@ -1,5 +1,4 @@
 import { CallLink } from '@/components/ui/CallLink';
-import { PhoneIcon } from '@/components/ui/PhoneIcon';
 import { FORM_ANCHOR, stickyBar } from '@/lib/content';
 
 /**
@@ -13,16 +12,20 @@ import { FORM_ANCHOR, stickyBar } from '@/lib/content';
 export function StickyCtaBar() {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white pb-[env(safe-area-inset-bottom)] shadow-bar lg:hidden">
-      <div className="flex items-center gap-2.5 px-3.5 py-2.5">
-        <a href={`#${FORM_ANCHOR}`} className="btn flex-1">
+      {/* Geometry as drawn: 9px/14px padding, 9px gap, 12px button padding on
+          13px text, which lands the buttons at 44px. */}
+      <div className="flex items-center gap-[9px] px-[14px] py-[9px]">
+        <a
+          href={`#${FORM_ANCHOR}`}
+          className="flex flex-1 items-center justify-center rounded-md bg-ink p-3 text-center text-body font-bold text-white transition-colors duration-150 hover:bg-black"
+        >
           {stickyBar.primary}
         </a>
         <CallLink
           source="sticky-bar"
-          className="flex min-h-[48px] items-center gap-1.5 rounded-md border-[1.5px] border-ink px-4 text-body font-bold text-ink"
+          className="flex items-center rounded-md border-[1.5px] border-ink px-[14px] py-3 text-body font-bold text-ink"
         >
           {stickyBar.secondary}
-          <PhoneIcon className="h-4 w-4" />
         </CallLink>
       </div>
     </div>

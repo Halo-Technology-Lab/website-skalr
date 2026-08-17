@@ -18,12 +18,12 @@ export function Offer() {
         {offer.heading}
       </h2>
 
-      <div className="mt-3 lg:mx-auto lg:mt-10 lg:grid lg:max-w-3xl lg:grid-cols-2 lg:items-start lg:gap-6">
+      <div className="mt-2 lg:mx-auto lg:mt-10 lg:grid lg:max-w-3xl lg:grid-cols-2 lg:items-start lg:gap-6">
         {offer.cards.map((card) => (
           <div
             key={card.name}
             className={cn(
-              'relative mb-2.5 border border-line bg-white p-3.5 lg:mb-0 lg:p-6',
+              'relative mb-[9px] border border-line bg-white p-3.5 lg:mb-0 lg:p-6',
               card.recommended && 'border-2 border-ink'
             )}
           >
@@ -38,7 +38,7 @@ export function Offer() {
             <p className="text-price font-extrabold text-ink md:text-price-lg">
               {card.price}
             </p>
-            <p className="mt-1 text-micro md:text-lead">{card.body}</p>
+            <p className="mt-1 text-chip md:text-lead">{card.body}</p>
           </div>
         ))}
       </div>

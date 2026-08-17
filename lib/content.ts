@@ -65,6 +65,23 @@ export const form = {
     heading: 'That did not send',
     body: 'Something went wrong at our end. Please try again, or call the clinic directly.',
   },
+  toasts: {
+    success: {
+      title: 'Request sent',
+      message:
+        'We will call you back within five minutes during clinic hours.',
+    },
+    warning: {
+      title: 'Check the form',
+      // {n} is replaced with the number of fields still to fix. When only one
+      // is wrong, the field's own message is used instead of a count.
+      message: '{n} things to check before we can call you back.',
+    },
+    error: {
+      title: 'That did not send',
+      message: 'Please try again, or call the clinic directly.',
+    },
+  },
 } as const;
 
 export const valueAnchor = {
@@ -131,6 +148,9 @@ export const beforeAfter = {
   pairs: [{ before: 'Before', after: 'After' }],
   micro:
     'Real patients, photographed under the same lighting and angle, unretouched, shared with written consent. Individual results vary.',
+  // Appended to the caption above, as one paragraph, exactly as the wireframe
+  // sets it. Drops away once the pack is approved.
+  hold: 'Do not publish until the consent and image pack is signed off.',
   // Wireframe note 6: this section stays a placeholder until the consented,
   // unretouched image pack exists. Flip to true only once it is signed off.
   imagePackApproved: false,

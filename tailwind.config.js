@@ -38,22 +38,31 @@ module.exports = {
         'muted-line': '#8A8279',
         field: '#D6D0C8',
         ghost: '#B9B2A9',
+        // Status tones. Muted enough to sit in the warm neutral palette, and
+        // all three clear WCAG AA on white and on the soft background.
         danger: '#991B1B',
+        warning: '#B45309',
+        success: '#3F6B54',
       },
       fontFamily: {
         sans: ['var(--font-sans)', 'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
       },
       fontSize: {
-        // Mobile scale, exactly as drawn in the 390px wireframe frame.
-        eyebrow: ['0.625rem', { lineHeight: '1.2', letterSpacing: '0.2em' }], // 10px
-        micro: ['0.6875rem', { lineHeight: '1.45' }], // 11px
+        // Mobile scale, measured off the wireframe's own 390px frame. The
+        // wireframe sets line-height 1.5 on the phone screen, so anything
+        // without its own value inherits that.
+        eyebrow: ['0.625rem', { lineHeight: '1.5', letterSpacing: '0.2em' }], // 10px
+        hint: ['0.625rem', { lineHeight: '1.5' }], // 10px
+        micro: ['0.65625rem', { lineHeight: '1.45' }], // 10.5px
+        chip: ['0.71875rem', { lineHeight: '1.5' }], // 11.5px
         caption: ['0.75rem', { lineHeight: '1.5' }], // 12px
-        body: ['0.8125rem', { lineHeight: '1.55' }], // 13px
-        'body-lg': ['0.875rem', { lineHeight: '1.55' }], // 14px
-        lead: ['1rem', { lineHeight: '1.55' }], // 16px
+        question: ['0.78125rem', { lineHeight: '1.5' }], // 12.5px
+        body: ['0.8125rem', { lineHeight: '1.5' }], // 13px
+        'body-lg': ['0.875rem', { lineHeight: '1.5' }], // 14px
+        lead: ['1rem', { lineHeight: '1.55' }], // 16px, desktop body
+        h2: ['1.0625rem', { lineHeight: '1.5' }], // 17px
         h3: ['1.0625rem', { lineHeight: '1.3' }], // 17px
-        h2: ['1.1875rem', { lineHeight: '1.25' }], // 19px
-        price: ['1.4375rem', { lineHeight: '1.1' }], // 23px
+        price: ['1.4375rem', { lineHeight: '1.5' }], // 23px
         h1: ['1.5625rem', { lineHeight: '1.15', letterSpacing: '-0.012em' }], // 25px
         // Desktop step-ups.
         'h1-lg': ['2.75rem', { lineHeight: '1.08', letterSpacing: '-0.02em' }], // 44px
@@ -73,6 +82,17 @@ module.exports = {
       boxShadow: {
         card: '0 1px 2px rgba(26,26,26,.04)',
         bar: '0 -1px 12px rgba(26,26,26,.08)',
+        toast: '0 6px 24px rgba(26,26,26,.16)',
+      },
+      keyframes: {
+        'toast-in': {
+          from: { opacity: '0', transform: 'translateY(8px) scale(.98)' },
+          to: { opacity: '1', transform: 'translateY(0) scale(1)' },
+        },
+      },
+      animation: {
+        // The global prefers-reduced-motion rule in globals.css collapses this.
+        'toast-in': 'toast-in 180ms cubic-bezier(.16,1,.3,1) both',
       },
     },
   },
