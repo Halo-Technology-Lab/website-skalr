@@ -31,7 +31,7 @@ app/
   layout.tsx            Fonts, metadata, GA4 + Meta Pixel, skip link
   page.tsx              The landing page, composing every section in order
   globals.css           Design tokens as component classes (.btn, .chip, .field-*)
-  api/lead/route.ts     Form intake: validate, normalise, CRM webhook, Meta CAPI
+  api/lead/route.ts     Form intake: validate, normalise, CRM webhook, email, Meta CAPI
   sitemap.ts robots.ts manifest.ts
 components/
   layout/               SiteHeader, SiteFooter, StickyCtaBar
@@ -40,6 +40,7 @@ components/
   analytics/MetaPixel.tsx
 lib/
   content.ts            Every word on the page, verbatim from the wireframe
+  email.ts              Resend client and the lead notification template
   site-config.ts        Brand, clinic contact details, tracking IDs
   lead.ts               Lead shape and validation, shared browser and server
   phone.ts              UK number parsing and E.164 normalisation
@@ -99,6 +100,19 @@ lib/
 - The FAQ accordion is native `details`/`summary`. No JavaScript.
 - Do not add a third-party map embed. Use a static image, or mount an embed
   behind a tap, and add the provider to the CSP `frame-src`.
+
+### Email
+- Every lead is emailed to the call team through Resend as well as posted to the
+  CRM, so an unconfigured or failing CRM never means a missed enquiry. Both are
+  best-effort: the visitor gets a success response either way, and failures are
+  logged for CloudWatch.
+- `RESEND_API_KEY` is the shared Halo Technology Lab key. `EMAIL_FROM` must stay
+  on a domain verified in Resend (`support@halotechlab.com`) or every send
+  bounces. `LEAD_NOTIFICATION_EMAIL` is the recipient; unset means no email.
+- `lib/email.ts` reads secrets, so it must never be imported by a client
+  component. Anything a visitor typed is escaped before it goes into the HTML.
+- There is no auto-reply to the visitor. Writing one means writing new copy, and
+  copy on this page is CAP-reviewed - see the Copy rules above.
 
 ### Tracking
 - `ViewContent` fires in the pixel snippet, `Lead` on form success and on every

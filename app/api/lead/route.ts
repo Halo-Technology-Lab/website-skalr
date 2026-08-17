@@ -8,16 +8,19 @@
  *   1. revalidates everything the browser validated
  *   2. normalises the phone number into E.164 for the CRM
  *   3. forwards the lead to CRM_WEBHOOK_URL with concern, timing and attribution
- *   4. sends the server half of the Meta Lead event, sharing the browser's
+ *   4. emails the lead to the call team through Resend, so a missing or
+ *      unconfigured CRM never means a missed enquiry
+ *   5. sends the server half of the Meta Lead event, sharing the browser's
  *      event ID so the Conversions API deduplicates
  *
- * The CRM forward and the CAPI call are both best-effort: if either fails the
- * visitor still gets a success response, because the lead has been captured and
- * the alternative is asking a real person to fill the form in twice. Failures
- * are logged loudly so they surface in CloudWatch.
+ * The CRM forward, the notification email and the CAPI call are all best-effort:
+ * if any fails the visitor still gets a success response, because the lead has
+ * been captured and the alternative is asking a real person to fill the form in
+ * twice. Failures are logged loudly so they surface in CloudWatch.
  */
 
 import { NextResponse } from 'next/server';
+import { sendLeadNotification } from '@/lib/email';
 import { hasErrors, normaliseLead, validateLead, type LeadInput } from '@/lib/lead';
 import { sendCapiEvent } from '@/lib/meta-capi';
 import { absoluteUrl } from '@/lib/site-config';
@@ -116,7 +119,17 @@ export async function POST(request: Request) {
     });
   }
 
-  // 2. Meta Conversions API, sharing the browser event ID.
+  // 2. Notification email to the call team.
+  try {
+    const sent = await sendLeadNotification(lead, { receivedAt });
+    if (!sent.success && sent.error !== 'Email not configured' && sent.error !== 'Recipient not configured') {
+      console.error('[lead] notification email failed', sent.error);
+    }
+  } catch (error) {
+    console.error('[lead] notification email threw', error);
+  }
+
+  // 3. Meta Conversions API, sharing the browser event ID.
   if (lead.eventId) {
     try {
       await sendCapiEvent({

@@ -28,6 +28,9 @@ const nextConfig = {
     META_PIXEL_ID: process.env.META_PIXEL_ID,
     META_CAPI_ACCESS_TOKEN: process.env.META_CAPI_ACCESS_TOKEN,
     META_CAPI_TEST_CODE: process.env.META_CAPI_TEST_CODE,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    EMAIL_FROM: process.env.EMAIL_FROM,
+    LEAD_NOTIFICATION_EMAIL: process.env.LEAD_NOTIFICATION_EMAIL,
   },
 
   reactStrictMode: true,
