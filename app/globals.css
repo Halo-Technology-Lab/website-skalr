@@ -121,6 +121,229 @@
            text-center text-[10px] uppercase tracking-[1px] text-[#989086];
   }
 
+  /* ---- Hero video ---------------------------------------------------- */
+
+  /* The clip is 9:16 and cannot be cropped to a wide box - it has burnt-in
+     subtitles around two thirds height and ends on a full-frame before and
+     after. Any wide crop destroys both.
+
+     So it fills the width of its column at every breakpoint and takes whatever
+     height the ratio gives it, running past the fold on the way. That is
+     deliberate: capping the height was tried first, and deriving the width from a
+     capped height left the clip narrow enough that the burnt-in subtitles became
+     hard to read. Width is what carries this clip, and a portrait video sitting
+     full-width in a portrait column simply looks like it belongs there.
+
+     No letterbox bars anywhere as a result: the box is exactly the clip. On
+     desktop the form beside it is sticky, so a tall hero costs nothing. */
+  .hero-video {
+    @apply relative aspect-[9/16] w-full overflow-hidden border border-line bg-soft;
+  }
+
+  .hero-video-el {
+    @apply absolute inset-0 h-full w-full object-cover;
+  }
+
+  /* The button covers the whole clip so a tap anywhere toggles playback, but it
+     is invisible until it is wanted: while the clip is playing and nothing is
+     hovering or focused. */
+  .hero-video-toggle {
+    @apply absolute inset-0 flex cursor-pointer items-center justify-center
+           opacity-0 transition-opacity duration-200;
+  }
+
+  .hero-video-toggle.is-visible,
+  .hero-video-toggle:focus-visible {
+    @apply opacity-100;
+  }
+
+  .hero-video-toggle:focus-visible .hero-video-badge {
+    @apply ring-2 ring-white ring-offset-2 ring-offset-ink/40;
+  }
+
+  .hero-video-badge {
+    @apply flex h-12 w-12 items-center justify-center rounded-full bg-ink/70
+           text-white backdrop-blur-sm transition-transform;
+  }
+
+  .hero-video-toggle:hover .hero-video-badge {
+    @apply scale-105 bg-ink/80;
+  }
+
+  /* ---- Hero crossfade ------------------------------------------------ */
+
+  /* The box owns the aspect ratio (set in Hero.tsx) and every frame is stacked
+     inside it, so frames two and three arriving cannot move anything below.
+
+     Only the first frame is opaque by default. That makes it the LCP element and
+     it is also what a reduced-motion visitor sees: the global
+     prefers-reduced-motion rule above collapses the animation to a single 0.01ms
+     run, after which the overlay frames revert to their base opacity of 0. */
+  .hero-frames {
+    @apply relative overflow-hidden border border-line bg-soft;
+  }
+
+  .hero-frame {
+    @apply absolute inset-0 h-full w-full object-cover;
+  }
+
+  .hero-frame:not(:first-child) {
+    @apply animate-hero-cycle opacity-0;
+  }
+
+  /* One 5s slot each. Frame one shows when nothing is stacked over it, so the
+     delays only need to cover frames two and three. Add a fourth frame and this
+     needs another delay plus a longer duration - see the keyframes in
+     tailwind.config.js, which are written for three. */
+  .hero-frame:nth-child(3) {
+    animation-delay: 5s;
+  }
+
+  /* ---- Before and after carousel ------------------------------------- */
+
+  /* Radio driven, no JavaScript, same approach as .chip below. The radios are
+     rendered before the track and the nav so both are later siblings and can be
+     selected from the checked state. Selectors are indexed by position rather
+     than by pair id, so lib/content.ts can rename pairs freely - but there is one
+     rule per pair, and these cover six. */
+  .ba {
+    @apply relative;
+  }
+
+  .ba-panel {
+    @apply hidden grid-cols-2 gap-[7px] lg:gap-4;
+  }
+
+  .ba-input:nth-of-type(1):checked ~ .ba-track .ba-panel:nth-child(1),
+  .ba-input:nth-of-type(2):checked ~ .ba-track .ba-panel:nth-child(2),
+  .ba-input:nth-of-type(3):checked ~ .ba-track .ba-panel:nth-child(3),
+  .ba-input:nth-of-type(4):checked ~ .ba-track .ba-panel:nth-child(4),
+  .ba-input:nth-of-type(5):checked ~ .ba-track .ba-panel:nth-child(5),
+  .ba-input:nth-of-type(6):checked ~ .ba-track .ba-panel:nth-child(6) {
+    @apply grid;
+  }
+
+  .ba-figure {
+    @apply relative m-0 overflow-hidden border border-line bg-soft;
+  }
+
+  /* 4:5 on mobile as well as desktop. The wireframe drew a 112px band here,
+     which is fine for a hatch placeholder and crops a face to a strip across the
+     eyes once a real photograph is in it. */
+  .ba-image {
+    @apply block aspect-[4/5] h-auto w-full object-cover;
+  }
+
+  .ba-caption {
+    @apply absolute bottom-0 left-0 bg-ink/75 px-1.5 py-1 text-[10px]
+           font-bold uppercase tracking-[1px] text-white;
+  }
+
+  .ba-nav {
+    @apply mt-2 flex items-center justify-center gap-1 lg:mt-4 lg:gap-2;
+  }
+
+  /* Every prev and next label is rendered; CSS reveals only the pair that
+     applies to the current selection. That is how a stateless carousel knows
+     what "next" means. */
+  .ba-arrow {
+    @apply hidden;
+  }
+
+  .ba-input:nth-of-type(1):checked ~ .ba-nav .ba-arrows .ba-arrow:nth-child(1),
+  .ba-input:nth-of-type(2):checked ~ .ba-nav .ba-arrows .ba-arrow:nth-child(2),
+  .ba-input:nth-of-type(3):checked ~ .ba-nav .ba-arrows .ba-arrow:nth-child(3),
+  .ba-input:nth-of-type(4):checked ~ .ba-nav .ba-arrows .ba-arrow:nth-child(4),
+  .ba-input:nth-of-type(5):checked ~ .ba-nav .ba-arrows .ba-arrow:nth-child(5),
+  .ba-input:nth-of-type(6):checked ~ .ba-nav .ba-arrows .ba-arrow:nth-child(6) {
+    @apply flex h-11 w-11 cursor-pointer items-center justify-center rounded-full
+           text-ink transition-colors hover:bg-accent-soft;
+  }
+
+  .ba-dots {
+    @apply flex items-center gap-2;
+  }
+
+  /* Drawn at 8px but tapped at 44px, using the same invisible ::after trick as
+     .chip - the dot must not grow to meet the target size. */
+  .ba-dot {
+    @apply relative block h-2 w-2 cursor-pointer rounded-full bg-ghost
+           transition-colors;
+  }
+
+  .ba-dot::after {
+    @apply absolute left-1/2 top-1/2 h-11 w-11 -translate-x-1/2 -translate-y-1/2
+           content-[''];
+  }
+
+  .ba-input:nth-of-type(1):checked ~ .ba-nav .ba-dots .ba-dot:nth-child(1),
+  .ba-input:nth-of-type(2):checked ~ .ba-nav .ba-dots .ba-dot:nth-child(2),
+  .ba-input:nth-of-type(3):checked ~ .ba-nav .ba-dots .ba-dot:nth-child(3),
+  .ba-input:nth-of-type(4):checked ~ .ba-nav .ba-dots .ba-dot:nth-child(4),
+  .ba-input:nth-of-type(5):checked ~ .ba-nav .ba-dots .ba-dot:nth-child(5),
+  .ba-input:nth-of-type(6):checked ~ .ba-nav .ba-dots .ba-dot:nth-child(6) {
+    @apply w-5 bg-ink;
+  }
+
+  /* The radios are sr-only, so the focus ring has to be drawn on the dot that
+     represents the focused pair. Without this, arrowing through the pairs by
+     keyboard gives no visible indication of where focus is. */
+  .ba-input:nth-of-type(1):focus-visible ~ .ba-nav .ba-dots .ba-dot:nth-child(1),
+  .ba-input:nth-of-type(2):focus-visible ~ .ba-nav .ba-dots .ba-dot:nth-child(2),
+  .ba-input:nth-of-type(3):focus-visible ~ .ba-nav .ba-dots .ba-dot:nth-child(3),
+  .ba-input:nth-of-type(4):focus-visible ~ .ba-nav .ba-dots .ba-dot:nth-child(4),
+  .ba-input:nth-of-type(5):focus-visible ~ .ba-nav .ba-dots .ba-dot:nth-child(5),
+  .ba-input:nth-of-type(6):focus-visible ~ .ba-nav .ba-dots .ba-dot:nth-child(6) {
+    @apply outline-none ring-2 ring-ink ring-offset-2 ring-offset-soft;
+  }
+
+  /* ---- Finding us map ------------------------------------------------ */
+
+  /* The SVG is basemap geometry only; the pins are HTML on top so their labels
+     stay real text. Positions come from lib/content.ts and are generated by
+     npm run build-map. */
+  .map {
+    @apply relative aspect-[16/9] overflow-hidden border border-line bg-soft;
+  }
+
+  .map-image {
+    @apply absolute inset-0 h-full w-full object-cover;
+  }
+
+  .map-pin {
+    @apply absolute flex -translate-x-1/2 -translate-y-full flex-col items-center gap-1;
+  }
+
+  .map-pin-label {
+    @apply flex flex-col items-center whitespace-nowrap rounded-md border
+           border-line bg-white px-1.5 py-1 text-center shadow-card;
+  }
+
+  .map-pin-label strong {
+    @apply block text-[10px] font-bold leading-tight text-ink md:text-caption;
+  }
+
+  .map-pin-sub {
+    @apply block text-[9px] leading-tight text-muted md:text-hint;
+  }
+
+  .map-pin-dot {
+    @apply block h-2.5 w-2.5 rounded-full border-2 border-white bg-ink
+           shadow-card md:h-3 md:w-3;
+  }
+
+  /* The clinic reads as the destination, so it gets the accent and the station
+     stays neutral. */
+  .map-pin[data-kind='clinic'] .map-pin-dot {
+    @apply bg-accent-ink;
+  }
+
+  /* Required by the Open Database Licence: the geometry is derived from
+     OpenStreetMap. Not decoration. */
+  .map-attribution {
+    @apply mt-1 text-[9px] leading-tight text-muted md:text-hint;
+  }
+
   /* ---- Section furniture -------------------------------------------- */
 
   .eyebrow {

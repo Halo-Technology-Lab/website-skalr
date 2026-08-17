@@ -44,6 +44,15 @@ next-env.d.ts
 *.swo
 .DS_Store
 
+# Build script caches (raw Overpass responses for the Finding us map)
+.cache
+
+# Source photography. Full resolution patient frames, kept out of the history on
+# purpose: only the derived crops under public/images/ are needed to build the
+# page. See assets/source/README.md.
+assets/source/*
+!assets/source/README.md
+
 # Misc
 *.pem
 Thumbs.db

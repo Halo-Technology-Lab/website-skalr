@@ -36,6 +36,16 @@ const nextConfig = {
   reactStrictMode: true,
 
   images: {
+    // Every image on this page is pre-optimised to the exact size its box
+    // renders at by `npm run optimize-images`, and committed as WebP. So there is
+    // nothing for a runtime optimiser to do, and on Amplify there is a positive
+    // reason to avoid one: its Next.js image Lambda is slow and fails quietly.
+    //
+    // Consequence to know about: with this set, next/image emits a single src and
+    // no srcset, and `sizes` is ignored. That is the right trade for fixed-size
+    // boxes. If genuinely responsive sources are ever needed, turn this off and
+    // hand-write <picture> rather than relying on the Lambda.
+    unoptimized: true,
     formats: ['image/avif', 'image/webp'],
     // Add a { protocol, hostname } entry for every external image host.
     remotePatterns: [],
@@ -116,6 +126,26 @@ const nextConfig = {
             ].join('; '),
           },
         ],
+      },
+
+      // Static assets are content-addressed by hand: the filenames under
+      // /images are stable and their contents only change when the pack is
+      // regenerated, at which point the filename should change too. Safe to
+      // cache for a year, and worth it - the map SVG and the six results images
+      // are the bulk of this page's bytes.
+      {
+        source: '/images/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      {
+        source: '/fonts/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      // The hero clip is the single largest asset on the page, so it is the one
+      // that most wants to be fetched exactly once.
+      {
+        source: '/video/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
     ];
   },

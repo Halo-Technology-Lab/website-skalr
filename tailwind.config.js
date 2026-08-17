@@ -89,10 +89,36 @@ module.exports = {
           from: { opacity: '0', transform: 'translateY(8px) scale(.98)' },
           to: { opacity: '1', transform: 'translateY(0) scale(1)' },
         },
+        // The hero crossfade. Three frames, a 5s slot each, so a 15s cycle with
+        // a 0.9s dissolve. Frame one is not animated at all - it sits underneath
+        // and shows whenever nothing is stacked over it - so these percentages
+        // describe an overlay occupying the SECOND slot, and frame three reuses
+        // them with a 5s delay (see .hero-frame in globals.css).
+        //
+        //   0.0s - 5.0s   ( 0%    - 33.33%)  hidden, frame one showing
+        //   5.0s - 5.9s   (33.33% - 39.33%)  fade in over frame one
+        //   5.9s - 10.0s  (39.33% - 66.67%)  held
+        //  10.0s - 10.9s  (66.67% - 72.67%)  fade out, as the next frame fades in
+        //
+        // The fade out deliberately overlaps the next frame's fade in. Leaving a
+        // gap there flashes frame one between every pair, which reads as a fault
+        // rather than a dissolve.
+        'hero-cycle': {
+          '0%, 33.333%': { opacity: '0' },
+          '39.333%, 66.667%': { opacity: '1' },
+          '72.667%, 100%': { opacity: '0' },
+        },
       },
       animation: {
-        // The global prefers-reduced-motion rule in globals.css collapses this.
+        // The global prefers-reduced-motion rule in globals.css collapses both
+        // of these.
         'toast-in': 'toast-in 180ms cubic-bezier(.16,1,.3,1) both',
+        // Must be declared here and applied as `animate-hero-cycle`, not written
+        // as a bare `animation:` shorthand in globals.css. Tailwind only emits
+        // the @keyframes block when a matching animation utility is used, so
+        // referencing the name directly leaves the keyframes out of the
+        // stylesheet and the frames silently never move.
+        'hero-cycle': 'hero-cycle 15s linear infinite',
       },
     },
   },

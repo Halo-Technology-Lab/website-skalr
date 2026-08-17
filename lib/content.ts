@@ -17,7 +17,62 @@ export const hero = {
   headline: 'The Korean Magic Lift has landed in North London',
   body:
     'Alteon combines dual wavelength laser and radiofrequency to lift, tighten and sculpt without surgery or needles. Many patients notice a visible difference from their first session, with results developing over the following weeks.',
-  mediaLabel: 'Hero image or 8 second treatment clip',
+  /**
+   * The hero shows one of two things, picked by HERO_MEDIA in Hero.tsx rather
+   * than by the visitor. The video is the current choice because it does more
+   * work: a practitioner explains the treatment, which answers "what actually
+   * happens to me" before anyone has to scroll.
+   */
+  media: {
+    /**
+     * A 9:16 social cut, kept in its native portrait shape on purpose.
+     *
+     * It cannot be cropped to landscape: the clip carries burnt-in subtitles at
+     * roughly two thirds height, and it ends on a full-frame before and after.
+     * Any crop to a wide box destroys both.
+     *
+     * It fills the width of its column at every breakpoint and runs past the
+     * fold - see .hero-video in globals.css for why.
+     *
+     * Encoded from a 20MB 1080x1920 50fps master down to 3.1MB at 810x1440 and
+     * 25fps by scripts/optimize-video.mjs, which explains the settings.
+     */
+    video: {
+      src: '/video/hero-treatment.mp4',
+      poster: '/video/hero-treatment-poster.webp',
+      width: 810,
+      height: 1440,
+      /**
+       * The accessible name for the clip. It autoplays MUTED, because every
+       * browser blocks autoplay with sound - so this description and the clip's
+       * own burnt-in subtitles are what carry it to anyone not hearing the
+       * voiceover.
+       */
+      label:
+        'A practitioner explains how the Alteon treatment works, a patient is treated, and the clip ends on that patient’s before and after. Subtitles are shown on the clip itself.',
+      play: 'Play video',
+      pause: 'Pause video',
+    },
+
+    /**
+     * The stills cycle, crossfading. They are the "after" frames of the same
+     * three consented patients shown in the before and after section, cropped
+     * 16:9 by scripts/optimize-images.mjs at a matched head size so the dissolve
+     * does not read as a jump-cut.
+     *
+     * None is marked priority: the video is the default, so preloading a still
+     * would only compete with it for bandwidth on the first paint.
+     */
+    stills: {
+      width: 1000,
+      height: 563,
+      frames: [
+        { src: '/images/hero/after-1.webp', alt: 'Patient one after treatment, facing the camera' },
+        { src: '/images/hero/after-2.webp', alt: 'Patient two after treatment, facing the camera' },
+        { src: '/images/hero/after-3.webp', alt: 'Patient three after treatment, facing the camera' },
+      ],
+    },
+  },
   trust: [
     '30 to 45 minutes',
     'Little to no downtime',
@@ -145,15 +200,60 @@ export const howItWorks = {
 
 export const beforeAfter = {
   heading: 'Before and after',
-  pairs: [{ before: 'Before', after: 'After' }],
+  beforeLabel: 'Before',
+  afterLabel: 'After',
+  /**
+   * One entry per consented pair, stepped through by the navigation toggle.
+   *
+   * Patients are numbered, not named. These paths and this alt text are public,
+   * and consent to publish a photograph is not consent to publish a name. If the
+   * consent does cover names, they can be added here and nowhere else.
+   *
+   * Frames are the front-on view of each subject, cropped 4:5 by
+   * scripts/optimize-images.mjs. Nothing is retouched, rescaled or colour
+   * corrected - the caption below claims as much, and normalising one half of a
+   * pair to match the other would make that claim untrue.
+   */
+  pairs: [
+    {
+      id: 'pair-1',
+      before: '/images/results/patient-1-before.webp',
+      after: '/images/results/patient-1-after.webp',
+      beforeAlt: 'Patient one before treatment, facing the camera',
+      afterAlt: 'Patient one after treatment, facing the camera',
+    },
+    {
+      id: 'pair-2',
+      before: '/images/results/patient-2-before.webp',
+      after: '/images/results/patient-2-after.webp',
+      beforeAlt: 'Patient two before treatment, facing the camera',
+      afterAlt: 'Patient two after treatment, facing the camera',
+    },
+    {
+      id: 'pair-3',
+      before: '/images/results/patient-3-before.webp',
+      after: '/images/results/patient-3-after.webp',
+      beforeAlt: 'Patient three before treatment, facing the camera',
+      afterAlt: 'Patient three after treatment, facing the camera',
+    },
+  ],
+  /** Intrinsic size of every results image. Set by scripts/optimize-images.mjs. */
+  imageWidth: 800,
+  imageHeight: 1000,
+  groupLabel: 'Before and after results',
+  previous: 'Previous pair',
+  next: 'Next pair',
+  /** {n} and {total} are substituted. Used for the dot labels. */
+  pairLabel: 'Pair {n} of {total}',
   micro:
     'Real patients, photographed under the same lighting and angle, unretouched, shared with written consent. Individual results vary.',
   // Appended to the caption above, as one paragraph, exactly as the wireframe
   // sets it. Drops away once the pack is approved.
   hold: 'Do not publish until the consent and image pack is signed off.',
-  // Wireframe note 6: this section stays a placeholder until the consented,
-  // unretouched image pack exists. Flip to true only once it is signed off.
-  imagePackApproved: false,
+  // Wireframe note 6: this section stayed a placeholder until the consented,
+  // unretouched image pack existed. Signed off and confirmed by the client on
+  // 17 August 2026, so the hold sentence no longer renders.
+  imagePackApproved: true,
 } as const;
 
 export const suitability = {
@@ -199,10 +299,40 @@ export const faq = {
 
 export const location = {
   heading: 'Finding us',
-  mapLabel: 'Map',
   venue: 'Beaufort Park',
   address: '12 Boulevard Drive, London NW9 5QF',
   travel: 'Northern line to Colindale, then a short walk. Parking on site.',
+  /**
+   * The map is generated by scripts/build-map.mjs from raw OpenStreetMap data and
+   * committed as a static SVG, so the page makes one cached request and no
+   * third-party request at all. Run `npm run build-map` to regenerate.
+   */
+  map: {
+    src: '/images/map/colindale-beaufort-park.svg',
+    width: 1600,
+    height: 900,
+    /**
+     * The basemap SVG carries no text, so this is the whole map as far as a
+     * screen reader is concerned. It has to say what the picture says.
+     */
+    alt:
+      'Map of Colindale. Colindale Underground station sits to the west, and the clinic is about 600 metres east on Boulevard Drive in Beaufort Park.',
+    /**
+     * Pin positions as percentages of the map box, printed by
+     * npm run build-map. Do not hand-tune them: they come from the Web Mercator
+     * projection of the bounding box lat 51.592774..51.598273,
+     * lon -0.253200..-0.237466, and re-running the script reproduces them.
+     */
+    pins: [
+      { id: 'station', label: 'Colindale', sub: 'Northern line', left: 21.0, top: 51.57 },
+      { id: 'clinic', label: 'The clinic', sub: 'Beaufort Park', left: 79.0, top: 48.43 },
+    ],
+    /**
+     * Required by the Open Database Licence, because the geometry in that SVG is
+     * derived from OpenStreetMap. Not decoration - do not remove it.
+     */
+    attribution: 'Map data © OpenStreetMap contributors',
+  },
 } as const;
 
 export const finalCta = {

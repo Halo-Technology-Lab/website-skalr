@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "optimize-images": "node scripts/optimize-images.mjs",
+    "optimize-video": "node scripts/optimize-video.mjs",
+    "build-map": "node scripts/build-map.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",
