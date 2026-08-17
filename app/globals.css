@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    @apply bg-white font-sans text-body text-copy antialiased;
+  }
+
+  /* One visible focus treatment everywhere, including inside the sticky bars. */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    @apply outline-none ring-2 ring-ink ring-offset-2 ring-offset-white;
+  }
+
+  ::selection {
+    @apply bg-accent-soft text-ink;
+  }
+}
+
+@layer components {
+  /* ---- Layout ------------------------------------------------------ */
+
+  .container-page {
+    @apply mx-auto w-full max-w-page px-[18px] lg:px-8;
+  }
+
+  /* ---- Buttons ------------------------------------------------------
+     44px minimum tap target throughout, per the wireframe build notes. */
+
+  .btn {
+    @apply flex min-h-[48px] w-full items-center justify-center rounded-md bg-ink px-5
+           py-3.5 text-center text-body-lg font-bold text-white
+           transition-colors duration-150 hover:bg-black
+           disabled:cursor-not-allowed disabled:opacity-70;
+  }
+
+  .btn-alt {
+    @apply flex min-h-[48px] w-full items-center justify-center rounded-md border-[1.5px]
+           border-ink bg-white px-5 py-3.5 text-center text-body-lg font-bold text-ink
+           transition-colors duration-150 hover:bg-soft;
+  }
+
+  /* ---- Form controls ------------------------------------------------ */
+
+  .field-label {
+    @apply mb-1.5 block text-micro font-bold text-ink md:text-caption;
+  }
+
+  .field-input {
+    /* 16px on mobile is deliberate: anything smaller makes iOS Safari zoom the
+       viewport on focus, which throws the visitor out of the form. */
+    @apply block min-h-[48px] w-full rounded-[5px] border border-field bg-white px-3
+           py-2.5 text-[16px] text-ink placeholder:text-muted
+           focus:border-ink md:text-lead;
+  }
+
+  .field-input[aria-invalid='true'] {
+    @apply border-danger;
+  }
+
+  .field-hint {
+    @apply mt-1.5 text-micro text-muted;
+  }
+
+  .field-error {
+    @apply mt-1.5 flex items-start gap-1.5 text-micro font-semibold text-danger;
+  }
+
+  /* Tap chips are real radio inputs; the input is visually hidden and the
+     label carries the styling, so keyboard and screen reader use is unchanged. */
+  .chip {
+    @apply flex min-h-[44px] cursor-pointer items-center rounded-2xl border border-field
+           bg-white px-3.5 py-2 text-caption text-copy transition-colors duration-150
+           hover:border-ink/40;
+  }
+
+  .chip-input:checked + .chip {
+    @apply border-ink bg-ink font-semibold text-white;
+  }
+
+  .chip-input:focus-visible + .chip {
+    @apply outline-none ring-2 ring-ink ring-offset-2 ring-offset-white;
+  }
+
+  /* ---- Media placeholders ------------------------------------------- */
+
+  .media-placeholder {
+    @apply flex items-center justify-center border border-line bg-placeholder p-2
+           text-center text-[10px] uppercase tracking-[1px] text-muted;
+  }
+
+  /* ---- Section furniture -------------------------------------------- */
+
+  .eyebrow {
+    @apply mb-2 block text-eyebrow font-bold uppercase text-accent-ink;
+  }
+
+  .section-heading {
+    @apply text-h2 font-bold text-ink md:text-h2-lg;
+  }
+
+  .micro {
+    @apply mt-2 text-micro text-muted md:text-caption;
+  }
+}

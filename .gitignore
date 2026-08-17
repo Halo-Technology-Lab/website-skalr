@@ -1,0 +1,49 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Next.js
+.next
+out
+
+# Production build
+build
+dist
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Environment files (.env.example is committed, everything else is not)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Amplify
+.amplify-hosting
+amplify/\#current-cloud-backend
+amplify/.config/local-*
+amplify/backend/amplify-meta.json
+
+# Testing
+coverage
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE / Editor
+.idea
+.vscode
+*.swp
+*.swo
+.DS_Store
+
+# Misc
+*.pem
+Thumbs.db
