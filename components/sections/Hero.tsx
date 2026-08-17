@@ -27,11 +27,14 @@ export function Hero() {
         aspect="md:aspect-[16/9]"
       />
 
+      {/* Grid items stretch to the tallest tile in the row, so each label is
+          centred on both axes: without that, a one-line tile floats at the top
+          while the tile beside it wraps to two. */}
       <ul className="mt-3.5 grid grid-cols-2 gap-[7px] lg:mt-7 lg:grid-cols-4">
         {hero.trust.map((item) => (
           <li
             key={item}
-            className="border border-line bg-white p-2 text-center text-micro font-semibold leading-[1.35] text-ink md:text-caption lg:p-3"
+            className="flex items-center justify-center border border-line bg-white p-2 text-center text-micro font-semibold leading-[1.35] text-ink md:text-caption lg:p-3"
           >
             {item}
           </li>
