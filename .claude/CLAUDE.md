@@ -71,8 +71,13 @@ lib/
   type scale and caps the measure, because 13px copy across a full tablet width
   is unreadable. `lg` (1024px) is the *layout* step - two-column hero, three
   column how-it-works, the sticky form card, and the closing band.
-- Minimum 44px tap targets on anything tappable. Form inputs are 16px on mobile
-  or iOS Safari zooms the viewport on focus.
+- Mobile boxes match the wireframe's rendered geometry exactly. Verify changes
+  by diffing computed styles against the wireframe file, not by eye.
+- Where a drawn element is smaller than a comfortable tap target (the 35px chips,
+  the header call link), a transparent `::after` extends the tappable area
+  instead of the box growing. Keep that pattern - do not "fix" it by adding
+  min-height.
+- Form inputs are 16px on mobile or iOS Safari zooms the viewport on focus.
 - Toasts live in `components/ui/Toast.tsx`: a `useToasts` hook plus a
   `ToastViewport`, no provider and no dependency. Toasts are keyed by id so a
   repeat replaces rather than stacks, and they announce politely because the
