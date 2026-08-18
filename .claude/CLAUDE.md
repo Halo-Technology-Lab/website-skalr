@@ -1,7 +1,8 @@
-# Alteon Colindale
+# Hannah London Colindale
 
-Single-page Meta Ads landing page for the Alteon treatment at Beaufort Park,
-Colindale. Built to the Skalr mid-fidelity wireframe (`docs/wireframe-brief.md`
+Single-page Meta Ads landing page for Hannah London at Beaufort Park,
+Colindale. The treatment is no longer named on the page - see the de-branding
+note at the top of `lib/content.ts` before reintroducing a device name. Built to the Skalr mid-fidelity wireframe (`docs/wireframe-brief.md`
 records what it specified). Architecture is derived from the Halo Technology Lab
 template; none of its styling or components are used.
 
@@ -66,14 +67,31 @@ lib/
   Never hardcode them in a component.
 
 ### Styling
-- Tokens are in `tailwind.config.js`, reproducing the wireframe palette and its
-  390px type scale. Repeated patterns are component classes in `globals.css`.
-- **Breakpoint roles**: `md` (768px) is the *typographic* step - it raises the
-  type scale and caps the measure, because 13px copy across a full tablet width
-  is unreadable. `lg` (1024px) is the *layout* step - two-column hero, three
-  column how-it-works, the sticky form card, and the closing band.
-- Mobile boxes match the wireframe's rendered geometry exactly. Verify changes
-  by diffing computed styles against the wireframe file, not by eye.
+- **The Hannah London brand reference supersedes the wireframe on type and
+  colour.** The wireframe now governs STRUCTURE and COPY only. Its palette was
+  always a declared stand-in, and its 13px mobile type scale is gone: the
+  reference sets a 16px mobile body floor and supplies the clamp scale that
+  replaced the fixed one. Do not "restore" the wireframe's geometry.
+- Tokens are in `tailwind.config.js`, taken from the brand reference. Every
+  deliberate departure from it is listed with its measured contrast ratio in
+  that file's header. Repeated patterns are component classes in `globals.css`.
+- Two families, no third: **Gelasio** for headings at weight 400, **Nunito Sans**
+  for everything else with 400 as the weight floor. Both are self-hosted through
+  `next/font` in `app/layout.tsx`. The reference supplies a `<link>` to Google
+  Fonts - do NOT use it, the CSP sets `font-src 'self'` and the page would fall
+  back to Georgia and Verdana.
+- Brand marks are traced from the client's artwork by `npm run trace-brand`,
+  which writes `public/brand/*.svg` and the generated `lib/brand-marks.ts`.
+  They render through an SVG sprite (`components/ui/BrandMark.tsx`) so the path
+  data appears in the document once and inherits `currentColor`. The paths need
+  `fill-rule="evenodd"` or the cameo and every letter counter fill solid.
+  `lib/brand-marks.ts` is ~76KB, so it must stay out of client components.
+- **Breakpoint roles**: the type scale is now clamp-based and sizes itself, so
+  `md` (768px) is only a measure cap. `lg` (1024px) is still the *layout* step -
+  the hero's form column, three-column how-it-works, and the closing band.
+- Body copy is `copy` on white and steps to `sage-ink` on the tinted bands;
+  `copy` measures 4.37:1 on `surface-sage`, just under AA. `Section soft` sets
+  that for its whole band, so most components inherit it and need nothing.
 - Where a drawn element is smaller than a comfortable tap target (the 35px chips,
   the header call link), a transparent `::after` extends the tappable area
   instead of the box growing. Keep that pattern - do not "fix" it by adding
@@ -85,9 +103,10 @@ lib/
   form already moves focus to the first invalid field. They are a supplement to
   inline field errors, never a replacement - a toast that has timed out cannot
   tell anyone what is still wrong.
-- Two colour tokens are a shade darker than the wireframe (`accent-ink`,
-  `muted`) because the originals fail WCAG AA for small text, and they carry the
-  legal micro-copy. Reasoning is in the `tailwind.config.js` header.
+- `copy-mute` (#8e8e8e) is the live site's body colour and is 3.28:1 on white.
+  It is for 24px+ text and decoration only, never micro-copy. Same story for
+  `line-soft` as a control border: it fails WCAG 1.4.11, so inputs and chips use
+  `field`. All of it is reasoned in the `tailwind.config.js` header.
 
 ### Performance
 - Server components by default. The only client components are the form, the

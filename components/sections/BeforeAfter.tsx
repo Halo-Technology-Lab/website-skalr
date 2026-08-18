@@ -36,7 +36,7 @@ export function BeforeAfter() {
         {beforeAfter.heading}
       </h2>
 
-      <div className="mt-2 lg:mx-auto lg:mt-10 lg:max-w-2xl">
+      <div className="mt-2 lg:mx-auto lg:mt-10 lg:max-w-5xl">
         <div className="ba" role="group" aria-label={beforeAfter.groupLabel}>
           {/* The radios come first so every panel and control below is a later
               sibling and can be selected from the checked state. */}

@@ -17,24 +17,24 @@ export function ValueAnchor() {
           <h2 id="value-anchor-heading" className="section-heading">
             {valueAnchor.heading}
           </h2>
-          <p className="mt-2 max-w-prose lg:mt-4 md:text-lead">{valueAnchor.body}</p>
+          <p className="mt-2 max-w-prose lg:mt-4 text-lead">{valueAnchor.body}</p>
         </div>
 
         <div className="mt-3 lg:mt-0">
-          <div className="border border-line">
+          <div className="overflow-hidden rounded-card border border-line">
             <div className="flex items-center justify-between border-b border-line bg-white px-2.5 py-2.5 lg:px-5 lg:py-4">
-              <span className="text-micro text-muted md:text-lead">
+              <span className="text-body text-copy">
                 {valueAnchor.comparisonLabel}
               </span>
-              <span className="text-caption text-muted line-through md:text-lead">
+              <span className="text-body text-copy line-through">
                 {valueAnchor.comparisonPrice}
               </span>
             </div>
-            <div className="flex items-center justify-between bg-soft px-2.5 py-2.5 lg:px-5 lg:py-4">
-              <span className="text-micro font-bold text-ink md:text-lead">
+            <div className="flex items-center justify-between bg-surface-sage px-2.5 py-2.5 lg:px-5 lg:py-4">
+              <span className="text-body font-semibold text-sage-ink">
                 {valueAnchor.ourLabel}
               </span>
-              <span className="text-body-lg font-extrabold text-ink md:text-price">
+              <span className="text-price font-semibold text-sage-ink">
                 {valueAnchor.ourPrice}
               </span>
             </div>

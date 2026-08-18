@@ -40,7 +40,7 @@ function getResend(): Resend | null {
  * in Resend or every send bounces.
  */
 function getEmailFrom(): string {
-  return process.env.EMAIL_FROM || 'Alteon at Colindale <support@halotechlab.com>';
+  return process.env.EMAIL_FROM || 'Hannah London <support@halotechlab.com>';
 }
 
 interface SendEmailOptions {
@@ -100,13 +100,15 @@ function esc(value: string): string {
 }
 
 // Palette lifted from tailwind.config.js. Email clients cannot see the
-// stylesheet, so every colour is inline and duplicated here on purpose.
-const INK = '#1A1A1A';
-const COPY = '#4A4A4A';
-const MUTED = '#6E675F';
-const LINE = '#E3E0DC';
-const SOFT = '#F6F4F1';
-const ACCENT = '#7A5C42';
+// stylesheet, so every colour is inline and duplicated here on purpose - which
+// also means this block has to be updated whenever the brand tokens change, or
+// the lead notification quietly drifts away from the page it came from.
+const INK = '#5f6a64'; // sage-ink
+const COPY = '#6d6e70';
+const MUTED = '#8e8e8e'; // copy-mute: headings and labels only, never small text
+const LINE = '#ebebeb';
+const SOFT = '#e9efe8'; // surface-sage
+const ACCENT = '#506766'; // sage-deep
 
 function emailLayout(content: string): string {
   return `<!DOCTYPE html>

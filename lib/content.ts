@@ -10,20 +10,59 @@
  * wireframe. They render as visible placeholders rather than invented copy.
  */
 
+/**
+ * DE-BRANDED FROM "ALTEON", and it was not a find-and-replace.
+ *
+ * The device name has been taken off the page in favour of the clinic brand.
+ * Three of the five occurrences could not simply become "Hannah London" without
+ * breaking the sentence or changing what it claims:
+ *
+ *   hero.body        "Alteon combines dual wavelength laser and radiofrequency"
+ *                    -> "The treatment combines ...". The clinic is not a laser
+ *                    platform, so the clinic name cannot be the subject here.
+ *   finalCta.heading "if Alteon suits your skin" -> "if the treatment suits your
+ *                    skin". Asking whether HANNAH LONDON suits your skin asks
+ *                    about the clinic, not the treatment.
+ *   video label      the device name simply dropped.
+ *
+ * The other two - the price row label and the value-anchor sentence, where the
+ * subject really is the clinic - took the clinic name directly.
+ *
+ * Nothing was added and no claim was strengthened: every edit either swaps a
+ * proper noun or replaces it with the neutral "the treatment". It still touches
+ * the CAP-reviewed claim set, so it needs sign-off before go-live.
+ */
+
 export const TO_CONFIRM = '[TO CONFIRM]';
 
 export const hero = {
   eyebrow: 'Beaufort Park, Colindale',
   headline: 'The Korean Magic Lift has landed in North London',
   body:
-    'Alteon combines dual wavelength laser and radiofrequency to lift, tighten and sculpt without surgery or needles. Many patients notice a visible difference from their first session, with results developing over the following weeks.',
-  /**
-   * The hero shows one of two things, picked by HERO_MEDIA in Hero.tsx rather
-   * than by the visitor. The video is the current choice because it does more
-   * work: a practitioner explains the treatment, which answers "what actually
-   * happens to me" before anyone has to scroll.
-   */
+    'The treatment combines dual wavelength laser and radiofrequency to lift, tighten and sculpt without surgery or needles. Many patients notice a visible difference from their first session, with results developing over the following weeks.',
   media: {
+    /**
+     * The client's own brand film, which runs as the hero on hannahlondon.com.
+     * It plays full-bleed behind the whole fold, under the sage scrim.
+     *
+     * DECORATIVE. It is aria-hidden and has no accessible name on purpose: it
+     * carries nothing the headline and body beside it do not already say, and
+     * announcing a wordless montage adds noise rather than meaning. Only its
+     * pause control is exposed.
+     *
+     * Trimmed from a 53.6s 1920x1080 15.5MB master to a 16s loop at 1600x900
+     * and 1.4MB, with the audio dropped, by scripts/optimize-video.mjs - which
+     * also records why that particular 16 seconds.
+     */
+    brandVideo: {
+      src: '/video/brand-hero.mp4',
+      poster: '/video/brand-hero-poster.webp',
+      width: 1600,
+      height: 900,
+      play: 'Play background video',
+      pause: 'Pause background video',
+    },
+
     /**
      * A 9:16 social cut, kept in its native portrait shape on purpose.
      *
@@ -31,8 +70,10 @@ export const hero = {
      * roughly two thirds height, and it ends on a full-frame before and after.
      * Any crop to a wide box destroys both.
      *
-     * It fills the width of its column at every breakpoint and runs past the
-     * fold - see .hero-video in globals.css for why.
+     * It fills the width of its column at every breakpoint - see
+     * .treatment-video in globals.css for why. It now lives in the How it works
+     * band rather than the hero; the key `hero.media.video` is kept because the
+     * clip is still the hero of that section's argument.
      *
      * Encoded from a 20MB 1080x1920 50fps master down to 3.1MB at 810x1440 and
      * 25fps by scripts/optimize-video.mjs, which explains the settings.
@@ -49,29 +90,11 @@ export const hero = {
        * voiceover.
        */
       label:
-        'A practitioner explains how the Alteon treatment works, a patient is treated, and the clip ends on that patient’s before and after. Subtitles are shown on the clip itself.',
+        'A practitioner explains how the treatment works, a patient is treated, and the clip ends on that patient’s before and after. Subtitles are shown on the clip itself.',
       play: 'Play video',
       pause: 'Pause video',
     },
 
-    /**
-     * The stills cycle, crossfading. They are the "after" frames of the same
-     * three consented patients shown in the before and after section, cropped
-     * 16:9 by scripts/optimize-images.mjs at a matched head size so the dissolve
-     * does not read as a jump-cut.
-     *
-     * None is marked priority: the video is the default, so preloading a still
-     * would only compete with it for bandwidth on the first paint.
-     */
-    stills: {
-      width: 1000,
-      height: 563,
-      frames: [
-        { src: '/images/hero/after-1.webp', alt: 'Patient one after treatment, facing the camera' },
-        { src: '/images/hero/after-2.webp', alt: 'Patient two after treatment, facing the camera' },
-        { src: '/images/hero/after-3.webp', alt: 'Patient three after treatment, facing the camera' },
-      ],
-    },
   },
   trust: [
     '30 to 45 minutes',
@@ -143,10 +166,10 @@ export const valueAnchor = {
   eyebrow: 'Why the price looks like this',
   heading: 'The same category of technology, without the usual price tag',
   body:
-    'Comparable dual laser and radiofrequency platforms carry a device cost several times higher, and clinics typically charge in the region of £2,000 per session to cover it. Alteon delivers the same class of treatment on a more affordable platform, so we can offer it at a fraction of that.',
+    'Comparable dual laser and radiofrequency platforms carry a device cost several times higher, and clinics typically charge in the region of £2,000 per session to cover it. Hannah London delivers the same class of treatment on a more affordable platform, so we can offer it at a fraction of that.',
   comparisonLabel: 'Comparable platform',
   comparisonPrice: 'around £2,000',
-  ourLabel: 'Alteon at Colindale',
+  ourLabel: 'Hannah London at Colindale',
   ourPrice: '£750',
   micro:
     'Comparison based on typical published pricing for that device class. Individual clinics vary.',
@@ -336,11 +359,69 @@ export const location = {
 } as const;
 
 export const finalCta = {
-  heading: 'Ready to see if Alteon suits your skin?',
+  heading: 'Ready to see if the treatment suits your skin?',
   body:
     'Book a consultation and we will assess your skin honestly, with no obligation to go ahead.',
   primary: 'Book your consultation',
   secondary: 'Call the clinic',
+} as const;
+
+/**
+ * The practitioner band, modelled on the same band on the client's home page.
+ *
+ * COMPLIANCE, READ BEFORE EDITING. This is the client's OWN published copy from
+ * hannahlondon.com, with one sentence removed and nothing whatsoever added:
+ *
+ *   "Step into our award-winning London clinics in Harley Street and Colindale,
+ *    and discover a world where state-of-the-art medicine meets unrivalled
+ *    comfort and care."
+ *
+ * It names Harley Street, and section 03 of the brand reference is explicit that
+ * this campaign page carries the Colindale clinic only. It also carries
+ * "award-winning", which is a claim outside the CAP-reviewed set for this
+ * campaign.
+ *
+ * Removing claims cannot introduce one, which is why this is defensible to build
+ * against. It still needs sign-off before go-live.
+ *
+ * `registration` is deliberately null. The brand reference names Dr Kaywaan Khan
+ * as lead clinician but gives no registration number, and that number is exactly
+ * what the "Who carries out the treatment?" FAQ needs and cannot yet have.
+ */
+export const practitioner = {
+  quote: [
+    'Treating patients holistically is not just my passion, it\u2019s my commitment.',
+    'Your story is unique, and we honour that individuality from your very first consultation through to our exceptional aftercare.',
+    'I can\u2019t wait to welcome you into our Hannah London family.',
+  ],
+  name: 'Dr Kaywaan Khan',
+  role: 'Lead clinician',
+  registration: null,
+  photo: {
+    src: '/images/practitioner/dr-kaywaan-khan.webp',
+    alt: 'Dr Kaywaan Khan, lead clinician at Hannah London',
+    width: 800,
+    height: 1240,
+  },
+} as const;
+
+/**
+ * Clinic opening hours.
+ *
+ * The brand reference flags its own value here: the hours were read off the
+ * booking calendar, and the client's site does not publish opening times. Until
+ * the clinic confirms them, `confirmed` stays false and the page renders the
+ * placeholder rather than a time someone might turn up for.
+ *
+ * This matters more than a normal placeholder because form.intro promises a call
+ * back "within five minutes during clinic hours", and that sentence only means
+ * something if the hours are stated somewhere.
+ */
+export const hours = {
+  label: 'Clinic hours',
+  value: 'Monday to Friday, 8am to 5pm',
+  confirmed: false,
+  placeholder: `${TO_CONFIRM} Clinic opening hours.`,
 } as const;
 
 export const stickyBar = {
@@ -348,11 +429,21 @@ export const stickyBar = {
   secondary: 'Call',
 } as const;
 
-// Section 07, item 5: clinic legal name, registration and privacy policy link.
+/**
+ * Wireframe section 07 item 5 is now closed: the clinic legal name, the company
+ * and ICO registrations and the policy links all come from section 03 of the
+ * brand reference, confirmed against the footer of the client's live site.
+ *
+ * `legal` is the reference's own footer wording verbatim. Note it reads
+ * "Treatment IS carried out by a qualified practitioner" where the wireframe had
+ * "Treatment carried out"; the reference's phrasing wins, because this is the
+ * client's own legal line rather than campaign copy.
+ */
 export const footer = {
   legal:
-    'Over 18s only. Results vary between individuals and are not guaranteed. Suitability is confirmed at consultation. Treatment carried out by a qualified practitioner.',
-  placeholder: `${TO_CONFIRM} Clinic legal name, registration and privacy policy link.`,
+    'Over 18s only. Results vary between individuals and are not guaranteed. Suitability is confirmed at consultation. Treatment is carried out by a qualified practitioner.',
+  privacyLabel: 'Privacy Policy',
+  termsLabel: 'Terms and Conditions',
 } as const;
 
 /** Anchor the booking CTAs point at. */

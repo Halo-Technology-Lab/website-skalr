@@ -152,6 +152,43 @@ for (const [i, frame] of HERO_FRAMES.entries()) {
   );
 }
 
+/**
+ * The practitioner cut-out, for the Dr Kaywaan Khan band.
+ *
+ * Handled outside emit() because everything emit() does is wrong for it: there
+ * is no crop (the subject is already cut out and centred), and it MUST keep its
+ * alpha channel - the band bleeds the figure over a tinted card with no box
+ * around it, exactly as the client's own site does, so a flattened rectangle
+ * would be visible as a hard edge.
+ *
+ * 800px wide covers the ~380px desktop render at better than 2x. sharp's trim()
+ * removes the transparent margin first so the output box is the figure itself,
+ * which means the band can position it by its own edges rather than guessing at
+ * the padding baked into the master.
+ */
+const PRACTITIONER = { source: 'brand/dr-kaywaan-khan.png', width: 800 };
+{
+  const source = path.join(SOURCE_DIR, PRACTITIONER.source);
+  const outPath = path.join(OUT_ROOT, 'practitioner', 'dr-kaywaan-khan.webp');
+  await fs.mkdir(path.dirname(outPath), { recursive: true });
+
+  const meta = await sharp(source)
+    .trim()
+    .resize(PRACTITIONER.width, null, { withoutEnlargement: true })
+    // alphaQuality 90 over the global 82: the cut-out edge runs along hair and a
+    // shirt collar, and alpha artefacts there read as a halo against the tint.
+    .webp({ quality: QUALITY, alphaQuality: 90 })
+    .toFile(outPath);
+
+  report.push({
+    outPath,
+    before: (await fs.stat(source)).size,
+    after: (await fs.stat(outPath)).size,
+    width: meta.width,
+    height: meta.height,
+  });
+}
+
 const kb = (bytes) => `${(bytes / 1024).toFixed(0)}KB`;
 const BUDGET = 150 * 1024;
 let over = 0;

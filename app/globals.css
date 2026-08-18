@@ -26,13 +26,23 @@
     @apply bg-white font-sans text-body text-copy antialiased;
   }
 
+  /* Headings are Gelasio at 400, not bold. That is how the live site sets them
+     and it is what gives the brand its quiet, editorial voice - a bold serif at
+     this size reads as a different company. Weight is carried by size and by
+     the sans-serif around it. */
+  h1,
+  h2,
+  h3 {
+    @apply font-serif font-normal text-sage-ink;
+  }
+
   /* One visible focus treatment everywhere, including inside the sticky bars. */
   :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-    @apply outline-none ring-2 ring-ink ring-offset-2 ring-offset-white;
+    @apply outline-none ring-2 ring-sage-deep ring-offset-2 ring-offset-white;
   }
 
   ::selection {
-    @apply bg-accent-soft text-ink;
+    @apply bg-surface-sage text-sage-ink;
   }
 }
 
@@ -43,63 +53,79 @@
     @apply mx-auto w-full max-w-page px-[18px] lg:px-8;
   }
 
-  /* ---- Buttons ------------------------------------------------------
-     44px minimum tap target throughout, per the wireframe build notes. */
+  /* ---- Buttons -------------------------------------------------------
+     Brand reference build note 5: sage deep or near black, white label, 44px
+     minimum height, full width on mobile. The live site's own primary is
+     #f1f1f1 with a white label at 1.13:1, which the reference explicitly tells
+     us not to copy. */
 
   .btn {
-    @apply flex min-h-[48px] w-full items-center justify-center rounded-md bg-ink p-3.5
-           text-center text-body-lg font-bold text-white
-           transition-colors duration-150 hover:bg-black
+    @apply flex min-h-[48px] w-full items-center justify-center rounded-control
+           bg-sage-deep p-3.5 text-center text-body font-semibold text-white
+           transition-colors duration-150 hover:bg-sage-deeper
            disabled:cursor-not-allowed disabled:opacity-70;
   }
 
+  /* Hover INVERTS rather than tinting. The obvious tint for a white button in
+     this palette is surface-sage - which is exactly the background of the
+     alternating bands these buttons sit on, so on those bands hovering made the
+     fill vanish into the band and the button appeared to dissolve. Inverting to
+     the solid brand colour reads the same on white and on every tint, and it is
+     what the client's own cards do on hover. White on sage-deep is 6.05:1. */
   .btn-alt {
-    @apply flex min-h-[48px] w-full items-center justify-center rounded-md border-[1.5px]
-           border-ink bg-white p-3.5 text-center text-body-lg font-bold text-ink
-           transition-colors duration-150 hover:bg-soft;
+    @apply flex min-h-[48px] w-full items-center justify-center rounded-control
+           border-[1.5px] border-sage-deep bg-white p-3.5 text-center text-body
+           font-semibold text-sage-deep transition-colors duration-150
+           hover:bg-sage-deep hover:text-white;
   }
 
   /* ---- Form controls ------------------------------------------------ */
 
   .field-label {
-    @apply mb-[5px] block text-[11px] font-bold leading-[1.5] text-ink;
+    @apply mb-[5px] block text-micro font-semibold text-sage-ink;
   }
 
   .field-input {
-    /* Wireframe geometry is 11px padding on a 12px font. The font is raised to
-       16px here and only here: anything smaller makes iOS Safari zoom the
-       viewport on focus, which throws the visitor out of the form mid-entry.
-       The tightened line-height keeps the box close to the drawn 42px. */
-    @apply block w-full rounded-[5px] border border-field bg-white p-[11px]
-           text-[16px] leading-[1.25] text-ink placeholder:text-muted
-           focus:border-ink md:text-lead;
+    /* 16px is a hard floor, not a preference: anything smaller makes iOS Safari
+       zoom the viewport on focus, which throws the visitor out of the form
+       mid-entry. It is also the brand reference's mobile body minimum.
+
+       Boxed rather than the live site's underline-only fields. That treatment is
+       on brand but it weakens the affordance on the one element this page exists
+       to get filled in, and the reference says nothing about inputs. */
+    @apply block w-full rounded-control border border-field bg-white p-[11px]
+           text-[16px] leading-[1.35] text-sage-ink placeholder:text-copy-mute
+           transition-colors duration-150 focus:border-sage-deep;
   }
 
   .field-input[aria-invalid='true'] {
-    @apply border-danger;
+    @apply border-error;
   }
 
   .field-hint {
-    @apply mt-1 text-hint text-muted;
+    @apply mt-1 text-micro text-copy;
   }
 
   .field-error {
-    @apply mt-1.5 flex items-start gap-1.5 text-micro font-semibold text-danger;
+    @apply mt-1.5 flex items-start gap-1.5 text-micro font-semibold text-error;
   }
 
-  /* Tap chips are real radio inputs; the input is visually hidden and the
-     label carries the styling, so keyboard and screen reader use is unchanged.
-     Box geometry is the wireframe's exactly: 11.5px text, 8px/12px padding,
-     16px radius, 35px tall. */
+  /* Tap chips are real radio inputs; the input is visually hidden and the label
+     carries the styling, so keyboard and screen reader use is unchanged.
+
+     Fully round, not a radius tier. These were rounded-2xl (16px), which is a
+     pixel off the 15px card radius - close enough to read as a card that had
+     gone slightly wrong rather than as a deliberately different kind of thing.
+     A pill says "control" at a glance, and it is what the client does with the
+     equivalent control on their own site. */
   .chip {
-    @apply relative flex cursor-pointer items-center rounded-2xl border border-field
-           bg-white px-3 py-2 text-chip text-ink transition-colors duration-150
-           hover:border-ink/40;
+    @apply relative flex min-h-[40px] cursor-pointer items-center rounded-full
+           border border-field bg-white px-4 py-2 text-body text-sage-ink
+           transition-colors duration-150 hover:border-sage-deep;
   }
 
-  /* The drawn chip is 35px, below a comfortable thumb target. This extends the
-     tappable area to 41px without changing the visual box - the 6px row gap is
-     exactly consumed, so neighbouring rows never overlap. */
+  /* Extends the tappable area past the drawn box without changing the box - the
+     row gap is exactly consumed, so neighbouring rows never overlap. */
   .chip::after {
     content: '';
     position: absolute;
@@ -107,105 +133,213 @@
   }
 
   .chip-input:checked + .chip {
-    @apply border-ink bg-ink font-bold text-white;
+    @apply border-sage-deep bg-sage-deep font-semibold text-white;
   }
 
   .chip-input:focus-visible + .chip {
-    @apply outline-none ring-2 ring-ink ring-offset-2 ring-offset-white;
+    @apply outline-none ring-2 ring-sage-deep ring-offset-2 ring-offset-white;
   }
 
-  /* ---- Media placeholders ------------------------------------------- */
+  /* ---- Brand mark ----------------------------------------------------
+     One traced path set, filled with currentColor, so the same mark works white
+     over the hero video and sage-ink once the header goes solid. Rendered
+     through an SVG <symbol> sprite so the path data appears in the document
+     once rather than once per use. */
 
-  .media-placeholder {
-    @apply flex items-center justify-center border border-line bg-placeholder p-2
-           text-center text-[10px] uppercase tracking-[1px] text-[#989086];
+  .brand-mark {
+    @apply block h-auto w-full text-current;
   }
 
-  /* ---- Hero video ---------------------------------------------------- */
+  /* ---- Brand hero -----------------------------------------------------
+     Full-bleed film behind the hero copy, matching the client's own homepage.
 
-  /* The clip is 9:16 and cannot be cropped to a wide box - it has burnt-in
-     subtitles around two thirds height and ends on a full-frame before and
-     after. Any wide crop destroys both.
+     The film is positioned against .hero-brand-frame, and the frame is what
+     makes this work at any viewport height:
 
-     So it fills the width of its column at every breakpoint and takes whatever
-     height the ratio gives it, running past the fold on the way. That is
-     deliberate: capping the height was tried first, and deriving the width from a
-     capped height left the clip narrow enough that the burnt-in subtitles became
-     hard to read. Width is what carries this clip, and a portrait video sitting
-     full-width in a portrait column simply looks like it belongs there.
+       mobile   the frame is `relative`, so the film covers EXACTLY the copy
+                block - at least one fold, and taller if the copy needs it. The
+                call-back form sits below it on white.
+       lg       the frame is `static`, so the film resolves against
+                .hero-brand-inner instead and covers the whole section, form
+                card included.
 
-     No letterbox bars anywhere as a result: the box is exactly the clip. On
-     desktop the form beside it is sticky, so a tall hero costs nothing. */
-  .hero-video {
-    @apply relative aspect-[9/16] w-full overflow-hidden border border-line bg-soft;
+     The earlier version capped the film at a flat 100svh. That broke on a short
+     phone: at 392x741 the copy is taller than the fold, so the CTA fell past the
+     bottom of the film onto white - and being white-on-transparent, it vanished.
+     Tying the film to the copy rather than to the viewport fixes it at every
+     height rather than at one.
+
+     Why not just stretch the film over the whole section on mobile? The section
+     is ~1700px tall there because the form is inside it, and object-cover on a
+     16:9 source in a 392x1700 box shows about 13% of the frame width - an
+     unreadable, massively zoomed slice. */
+
+  .hero-brand {
+    @apply relative flex w-full flex-col overflow-hidden bg-white lg:min-h-[100svh]
+           lg:bg-sage-ink;
   }
 
-  .hero-video-el {
+  /* 100svh, not 100vh: vh is measured against the viewport WITHOUT browser
+     chrome, so a vh hero is always taller than what is actually visible and the
+     CTA ends up under the address bar. min-height, so the copy can push it
+     taller when it needs to. */
+  .hero-brand-frame {
+    @apply relative flex min-h-[100svh] flex-col justify-center
+           lg:static lg:block lg:min-h-0;
+  }
+
+  .hero-brand-video {
+    @apply absolute inset-0 h-full w-full object-cover;
+  }
+
+  /* The wash over the hero film: the same sage as the header (#96A39A), kept
+     deliberately light so the film reads through it, plus a soft dark gradient
+     that does nothing but hold the copy legible over the brighter frames.
+
+     Contrast is the thing to watch here, not the colour, and at these alphas it
+     does not pass. The hero body copy is 17.6-20px at weight 400 and renders at
+     white/90, so it needs 4.5:1, and even the headline needs 3.0 as large text.
+     Measured over the encoded clip sampled at 4fps at full resolution, the worst
+     frame gives 4.08:1 for pure white and 3.65:1 for white/90 across the region
+     the copy occupies. It is this light because the brief was a wash you can see
+     the film through: it keeps 21% of the clip's local contrast, against 16% for
+     the heavier sage wash before it.
+
+     The ladder, if the copy needs to win some of that back (flat alpha, then the
+     gradient's start and end, then white and white/90 at the worst frame):
+
+       0.38  0.20 - 0.36   2.52  2.32
+       0.45  0.30 - 0.46   3.31  3.00
+       0.50  0.38 - 0.54   4.08  3.65   <- here
+       0.50  0.46 - 0.62   4.88  4.32
+       0.55  0.46 - 0.62   5.00  4.41
+
+     Re-run that check if the clip is ever re-cut, or if either alpha moves - a
+     brighter shot moves it, and this wash has far less margin than any of the
+     ones it replaced. */
+  .hero-scrim {
+    @apply absolute inset-0;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(26, 34, 28, 0.38) 0%,
+        rgba(26, 34, 28, 0.46) 45%,
+        rgba(26, 34, 28, 0.54) 100%
+      ),
+      rgba(150, 163, 154, 0.5);
+  }
+
+  /* The lg padding sits here, outside the grid's max-w-page measure, matching
+     how Section pads its bands - that is what puts the hero copy on the same
+     left rail as every other full-width band.
+
+     It does not inset the film: `absolute inset-0` resolves against the
+     containing block's PADDING box, so the video and the scrim still span the
+     full width. */
+  .hero-brand-inner {
+    @apply relative z-10 flex w-full flex-1 flex-col justify-center lg:px-8;
+  }
+
+  /* The copy itself. Horizontal padding lives here rather than on the grid, so
+     the frame - and therefore the film - runs edge to edge on mobile.
+
+     The bottom padding clears the sticky CTA bar, which is ~83px of fixed
+     furniture at the bottom of every mobile viewport. Without it the hero's own
+     CTA and the legal line underneath sit behind the bar - which is what the
+     "partly invisible" button was, once the film stopped clipping it. The frame
+     centres its content, so this reads as the copy sitting slightly high rather
+     than as a gap. */
+  .hero-brand-copy {
+    @apply relative z-10 px-[18px] pt-[104px] text-white lg:p-0;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 96px);
+  }
+
+  @screen lg {
+    .hero-brand-copy {
+      padding-bottom: 0;
+    }
+  }
+
+  /* Pause control for the background clip. WCAG 2.2.2: any motion that starts
+     automatically and runs over five seconds needs a way to stop it. It sits
+     bottom-right rather than centred over the clip, because unlike the treatment
+     video below the fold, this one is decorative and the centre is occupied. */
+  .hero-brand-toggle {
+    @apply absolute bottom-4 right-4 z-20 flex h-11 w-11 items-center
+           justify-center rounded-full border border-white/40 bg-black/30
+           text-white backdrop-blur-sm transition-colors duration-150
+           hover:bg-black/50 lg:bottom-6 lg:right-6;
+  }
+
+  /* ---- Treatment video -----------------------------------------------
+     The practitioner clip, in the How it works band. It is 9:16 and cannot be
+     cropped to a wide box - it has burnt-in subtitles around two thirds height
+     and ends on a full-frame before and after. Any wide crop destroys both, so
+     the box is exactly the clip and no letterbox bars appear anywhere. */
+
+  .treatment-video {
+    @apply relative aspect-[9/16] w-full overflow-hidden rounded-card
+           bg-surface-sage;
+  }
+
+  .treatment-video-el {
     @apply absolute inset-0 h-full w-full object-cover;
   }
 
   /* The button covers the whole clip so a tap anywhere toggles playback, but it
      is invisible until it is wanted: while the clip is playing and nothing is
      hovering or focused. */
-  .hero-video-toggle {
+  .treatment-video-toggle {
     @apply absolute inset-0 flex cursor-pointer items-center justify-center
            opacity-0 transition-opacity duration-200;
   }
 
-  .hero-video-toggle.is-visible,
-  .hero-video-toggle:focus-visible {
+  .treatment-video-toggle.is-visible,
+  .treatment-video-toggle:focus-visible {
     @apply opacity-100;
   }
 
-  .hero-video-toggle:focus-visible .hero-video-badge {
-    @apply ring-2 ring-white ring-offset-2 ring-offset-ink/40;
+  .treatment-video-toggle:focus-visible .treatment-video-badge {
+    @apply ring-2 ring-white ring-offset-2 ring-offset-sage-ink/40;
   }
 
-  .hero-video-badge {
-    @apply flex h-12 w-12 items-center justify-center rounded-full bg-ink/70
-           text-white backdrop-blur-sm transition-transform;
+  .treatment-video-badge {
+    @apply flex h-12 w-12 items-center justify-center rounded-full
+           bg-sage-ink/70 text-white backdrop-blur-sm transition-transform;
   }
 
-  .hero-video-toggle:hover .hero-video-badge {
-    @apply scale-105 bg-ink/80;
+  .treatment-video-toggle:hover .treatment-video-badge {
+    @apply scale-105 bg-sage-ink/80;
   }
 
-  /* ---- Hero crossfade ------------------------------------------------ */
+  /* ---- Practitioner band ----------------------------------------------
+     Mirrors the client's own: a tinted card with the figure bleeding off the
+     right edge and cropping at the card boundary, rather than sitting in a box
+     of its own. */
 
-  /* The box owns the aspect ratio (set in Hero.tsx) and every frame is stacked
-     inside it, so frames two and three arriving cannot move anything below.
-
-     Only the first frame is opaque by default. That makes it the LCP element and
-     it is also what a reduced-motion visitor sees: the global
-     prefers-reduced-motion rule above collapses the animation to a single 0.01ms
-     run, after which the overlay frames revert to their base opacity of 0. */
-  .hero-frames {
-    @apply relative overflow-hidden border border-line bg-soft;
+  /* The min-height is what gives the figure room to stand up in. Without it the
+     card is only as tall as the quote, and the figure - sized to the card - gets
+     its head cropped by the overflow. */
+  .practitioner-card {
+    @apply relative overflow-hidden rounded-card bg-surface-grey-50 lg:min-h-[480px];
   }
 
-  .hero-frame {
-    @apply absolute inset-0 h-full w-full object-cover;
+  /* Sized by HEIGHT, not width. Width-first sizing makes the figure taller than
+     the card at any width worth using, and the card clips from the top - which
+     takes the head off. Anchored to the bottom so he stands on the card edge,
+     the way the client's own band does it. */
+  .practitioner-figure {
+    @apply block h-auto w-full max-w-[260px] self-end object-contain object-bottom
+           lg:absolute lg:bottom-0 lg:right-8 lg:h-full lg:w-auto lg:max-w-[40%];
   }
 
-  .hero-frame:not(:first-child) {
-    @apply animate-hero-cycle opacity-0;
-  }
+  /* ---- Before and after carousel -------------------------------------
 
-  /* One 5s slot each. Frame one shows when nothing is stacked over it, so the
-     delays only need to cover frames two and three. Add a fourth frame and this
-     needs another delay plus a longer duration - see the keyframes in
-     tailwind.config.js, which are written for three. */
-  .hero-frame:nth-child(3) {
-    animation-delay: 5s;
-  }
-
-  /* ---- Before and after carousel ------------------------------------- */
-
-  /* Radio driven, no JavaScript, same approach as .chip below. The radios are
+     Radio driven, no JavaScript, same approach as .chip above. The radios are
      rendered before the track and the nav so both are later siblings and can be
      selected from the checked state. Selectors are indexed by position rather
-     than by pair id, so lib/content.ts can rename pairs freely - but there is one
-     rule per pair, and these cover six. */
+     than by pair id, so lib/content.ts can rename pairs freely - but there is
+     one rule per pair, and these cover six. */
   .ba {
     @apply relative;
   }
@@ -224,19 +358,16 @@
   }
 
   .ba-figure {
-    @apply relative m-0 overflow-hidden border border-line bg-soft;
+    @apply relative m-0 overflow-hidden rounded-card bg-surface-sage;
   }
 
-  /* 4:5 on mobile as well as desktop. The wireframe drew a 112px band here,
-     which is fine for a hatch placeholder and crops a face to a strip across the
-     eyes once a real photograph is in it. */
   .ba-image {
     @apply block aspect-[4/5] h-auto w-full object-cover;
   }
 
   .ba-caption {
-    @apply absolute bottom-0 left-0 bg-ink/75 px-1.5 py-1 text-[10px]
-           font-bold uppercase tracking-[1px] text-white;
+    @apply absolute bottom-0 left-0 bg-sage-ink/75 px-2 py-1 text-micro
+           font-semibold uppercase tracking-[1px] text-white;
   }
 
   .ba-nav {
@@ -257,7 +388,7 @@
   .ba-input:nth-of-type(5):checked ~ .ba-nav .ba-arrows .ba-arrow:nth-child(5),
   .ba-input:nth-of-type(6):checked ~ .ba-nav .ba-arrows .ba-arrow:nth-child(6) {
     @apply flex h-11 w-11 cursor-pointer items-center justify-center rounded-full
-           text-ink transition-colors hover:bg-accent-soft;
+           text-sage-deep transition-colors hover:bg-sage-deep hover:text-white;
   }
 
   .ba-dots {
@@ -267,7 +398,7 @@
   /* Drawn at 8px but tapped at 44px, using the same invisible ::after trick as
      .chip - the dot must not grow to meet the target size. */
   .ba-dot {
-    @apply relative block h-2 w-2 cursor-pointer rounded-full bg-ghost
+    @apply relative block h-2 w-2 cursor-pointer rounded-full bg-line-soft
            transition-colors;
   }
 
@@ -282,7 +413,7 @@
   .ba-input:nth-of-type(4):checked ~ .ba-nav .ba-dots .ba-dot:nth-child(4),
   .ba-input:nth-of-type(5):checked ~ .ba-nav .ba-dots .ba-dot:nth-child(5),
   .ba-input:nth-of-type(6):checked ~ .ba-nav .ba-dots .ba-dot:nth-child(6) {
-    @apply w-5 bg-ink;
+    @apply w-5 bg-sage-deep;
   }
 
   /* The radios are sr-only, so the focus ring has to be drawn on the dot that
@@ -294,7 +425,7 @@
   .ba-input:nth-of-type(4):focus-visible ~ .ba-nav .ba-dots .ba-dot:nth-child(4),
   .ba-input:nth-of-type(5):focus-visible ~ .ba-nav .ba-dots .ba-dot:nth-child(5),
   .ba-input:nth-of-type(6):focus-visible ~ .ba-nav .ba-dots .ba-dot:nth-child(6) {
-    @apply outline-none ring-2 ring-ink ring-offset-2 ring-offset-soft;
+    @apply outline-none ring-2 ring-sage-deep ring-offset-2 ring-offset-white;
   }
 
   /* ---- Finding us map ------------------------------------------------ */
@@ -303,7 +434,7 @@
      stay real text. Positions come from lib/content.ts and are generated by
      npm run build-map. */
   .map {
-    @apply relative aspect-[16/9] overflow-hidden border border-line bg-soft;
+    @apply relative aspect-[16/9] overflow-hidden rounded-card bg-surface-sage;
   }
 
   .map-image {
@@ -315,46 +446,53 @@
   }
 
   .map-pin-label {
-    @apply flex flex-col items-center whitespace-nowrap rounded-md border
-           border-line bg-white px-1.5 py-1 text-center shadow-card;
+    @apply flex flex-col items-center whitespace-nowrap rounded-control border
+           border-line bg-white px-2 py-1 text-center shadow-card;
   }
 
   .map-pin-label strong {
-    @apply block text-[10px] font-bold leading-tight text-ink md:text-caption;
+    @apply block text-micro font-semibold leading-tight text-sage-ink;
   }
 
   .map-pin-sub {
-    @apply block text-[9px] leading-tight text-muted md:text-hint;
+    @apply block text-micro leading-tight text-copy;
   }
 
   .map-pin-dot {
-    @apply block h-2.5 w-2.5 rounded-full border-2 border-white bg-ink
+    @apply block h-2.5 w-2.5 rounded-full border-2 border-white bg-copy
            shadow-card md:h-3 md:w-3;
   }
 
-  /* The clinic reads as the destination, so it gets the accent and the station
-     stays neutral. */
+  /* The clinic reads as the destination, so it gets the brand colour and the
+     station stays neutral. */
   .map-pin[data-kind='clinic'] .map-pin-dot {
-    @apply bg-accent-ink;
+    @apply bg-sage-deep;
   }
 
   /* Required by the Open Database Licence: the geometry is derived from
      OpenStreetMap. Not decoration. */
   .map-attribution {
-    @apply mt-1 text-[9px] leading-tight text-muted md:text-hint;
+    /* sage-ink, not copy-mute. This is an Open Database Licence obligation, not
+       decoration, so it has to clear AA on the tinted band it sits on. */
+    @apply mt-1 text-micro leading-tight text-sage-ink;
   }
 
   /* ---- Section furniture -------------------------------------------- */
 
   .eyebrow {
-    @apply mb-[9px] block text-eyebrow font-bold uppercase text-accent-ink;
+    @apply mb-[9px] block text-eyebrow font-semibold uppercase text-sage-deep;
   }
 
   .section-heading {
-    @apply text-h2 font-bold text-ink md:text-h2-lg;
+    @apply text-h2;
   }
 
+  /* sage-ink, not copy. This class carries the legal and compliance micro-copy,
+     which appears on white AND on the tinted bands - and `copy` measures 4.37:1
+     on surface-sage, just under AA. sage-ink clears it on every surface in the
+     palette (5.63:1 on white, 4.82:1 on the tints) so the class needs no
+     per-band variant. */
   .micro {
-    @apply mt-2 text-micro text-muted md:text-caption;
+    @apply mt-2 text-micro text-sage-ink;
   }
 }

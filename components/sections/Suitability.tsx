@@ -15,19 +15,22 @@ export function Suitability() {
         {suitability.heading}
       </h2>
 
-      <div className="mt-2 grid gap-[9px] lg:mx-auto lg:mt-10 lg:max-w-4xl lg:grid-cols-2 lg:gap-6">
+      <div className="mt-2 grid gap-[9px] lg:mx-auto lg:mt-10 lg:max-w-5xl lg:grid-cols-2 lg:gap-6">
         {suitability.columns.map((column) => (
-          <div key={column.title} className="border border-line bg-white p-[11px] lg:p-6">
-            {/* The heading sits in its own bordered box inside the card, as drawn. */}
-            <h3 className="mb-[5px] border border-line bg-white p-[11px] text-caption font-bold text-ink md:text-h3 lg:mb-3 lg:p-4">
+          <div key={column.title} className="rounded-card border border-line bg-white p-[11px] lg:p-6">
+            {/* The heading sits in its own bordered box inside the card, as
+                drawn. It takes the tile radius rather than the card one: a 15px
+                box inside a 15px box reads as a mistake, because the inner
+                corner should always be tighter than the one containing it. */}
+            <h3 className="mb-[5px] rounded-tile border border-line bg-white p-[11px] text-h3 font-semibold text-sage-ink lg:mb-3 lg:p-4">
               {column.title}
             </h3>
-            <p className="text-chip md:text-lead">{column.body}</p>
+            <p className="text-body">{column.body}</p>
           </div>
         ))}
       </div>
 
-      <p className="micro lg:mx-auto lg:max-w-4xl lg:text-center">{suitability.micro}</p>
+      <p className="micro lg:mx-auto lg:max-w-5xl lg:text-center">{suitability.micro}</p>
     </Section>
   );
 }

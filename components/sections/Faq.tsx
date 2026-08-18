@@ -20,25 +20,29 @@ export function Faq() {
         {faq.heading}
       </h2>
 
-      <div className="mt-2 lg:mx-auto lg:mt-10 lg:max-w-3xl">
+      <div className="mt-2 lg:mx-auto lg:mt-10 lg:max-w-5xl">
         {faq.items.map((item, index) => (
           <details
             key={item.question}
             open={index === 0}
             className="group border-b border-line"
           >
-            <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-2.5 py-[11px] text-question font-semibold text-ink marker:content-none md:text-lead lg:py-4">
+            <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-2.5 py-[11px] text-body font-semibold text-sage-ink marker:content-none lg:py-4">
               {item.question}
               <span
                 aria-hidden="true"
-                className="flex-none text-body-lg font-bold leading-none text-accent-ink transition-transform duration-150 group-open:rotate-45 md:text-h3"
+                className="flex-none text-h3 font-semibold leading-none text-sage-deep transition-transform duration-150 group-open:rotate-45"
               >
                 +
               </span>
             </summary>
-            <div className="pb-3 text-micro lg:pb-5 md:text-lead">
+            {/* The summary row spans the full band - a question on the left and
+                a + on the right reads fine at any width. The ANSWER does not:
+                at 1024px it runs to about 128 characters a line, so it keeps a
+                measure of its own. */}
+            <div className="max-w-prose pb-3 text-body lg:pb-5">
               {item.answer ?? (
-                <span className="text-accent-ink">{faq.placeholderAnswer}</span>
+                <span className="text-sage-deep">{faq.placeholderAnswer}</span>
               )}
             </div>
           </details>

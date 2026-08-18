@@ -29,7 +29,7 @@ import { promises as fs } from 'node:fs';
 
 const OUT = 'public/images/map/colindale-beaufort-park.svg';
 const OVERPASS = 'https://overpass-api.de/api/interpreter';
-const UA = 'alteon-colindale-site/1.0 (build-map; arun@halotechlab.com)';
+const UA = 'hannah-london-colindale-site/1.0 (build-map; arun@halotechlab.com)';
 
 /**
  * The two points the map exists to show. Both confirmed against OSM /

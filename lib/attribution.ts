@@ -19,7 +19,7 @@ const KEYS = [
   'gclid',
 ] as const;
 
-const STORAGE_KEY = 'alteon.attribution';
+const STORAGE_KEY = 'hannah-london.attribution';
 
 export type Attribution = Record<string, string>;
 

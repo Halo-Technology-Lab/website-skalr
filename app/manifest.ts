@@ -19,8 +19,8 @@ export default function manifest(): MetadataRoute.Manifest {
         purpose: 'maskable',
       },
     ],
-    // TODO: set these from the wireframe palette.
-    theme_color: '#ffffff',
+    // Sage deep, the brand's primary. Matches viewport.themeColor in layout.tsx.
+    theme_color: '#506766',
     background_color: '#ffffff',
     display: 'standalone',
   };

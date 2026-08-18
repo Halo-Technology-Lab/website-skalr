@@ -1,6 +1,6 @@
-# Alteon Colindale
+# Hannah London Colindale
 
-Meta Ads landing page for the Alteon treatment at Beaufort Park, Colindale.
+Meta Ads landing page for Hannah London at Beaufort Park, Colindale.
 Next.js 14 (App Router), TypeScript, Tailwind CSS, deployed on AWS Amplify.
 
 Built to the Skalr mid-fidelity wireframe. `docs/wireframe-brief.md` records the

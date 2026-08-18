@@ -11,7 +11,7 @@
  * page would make the discrepancy machine-readable.
  */
 
-import { faq, location } from '@/lib/content';
+import { faq, hours, location } from '@/lib/content';
 import { siteConfig } from '@/lib/site-config';
 
 export function businessJsonLd(): Record<string, unknown> {
@@ -20,9 +20,13 @@ export function businessJsonLd(): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'MedicalBusiness',
-    name: clinic.legalName || siteConfig.name,
+    // The public-facing brand, with the registered entity alongside it. Search
+    // results should show what the ad showed, not the Companies House name.
+    name: siteConfig.name,
+    legalName: clinic.legalName,
     url: siteConfig.url,
-    ...(clinic.phoneHref ? { telephone: clinic.phoneHref } : {}),
+    telephone: clinic.phoneHref,
+    email: clinic.email,
     address: {
       '@type': 'PostalAddress',
       streetAddress: `${location.venue}, ${clinic.addressLine}`,
@@ -30,6 +34,19 @@ export function businessJsonLd(): Record<string, unknown> {
       postalCode: clinic.postcode,
       addressCountry: 'GB',
     },
+    // Only published once the clinic has confirmed them. The brand reference
+    // took these off the booking calendar, and hours that send someone to a shut
+    // door are worse than no hours at all.
+    ...(hours.confirmed
+      ? {
+          openingHoursSpecification: {
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            opens: '08:00',
+            closes: '17:00',
+          },
+        }
+      : {}),
     areaServed: 'North London',
   };
 }

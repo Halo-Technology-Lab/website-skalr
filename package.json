@@ -1,5 +1,5 @@
 {
-  "name": "alteon-colindale",
+  "name": "hannah-london-colindale",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "optimize-images": "node scripts/optimize-images.mjs",
     "optimize-video": "node scripts/optimize-video.mjs",
-    "build-map": "node scripts/build-map.mjs"
+    "build-map": "node scripts/build-map.mjs",
+    "trace-brand": "node scripts/trace-brand.mjs",
+    "build-icons": "node --experimental-strip-types scripts/build-brand-icons.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -28,6 +30,7 @@
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.35",
     "postcss": "^8.4.0",
+    "potrace": "^2.1.8",
     "sharp": "^0.35.3",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.3.0"

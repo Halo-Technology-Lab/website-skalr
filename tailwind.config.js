@@ -1,18 +1,40 @@
 /**
- * Design tokens taken directly from the Skalr mid-fidelity wireframe.
+ * Design tokens for the Hannah London brand.
  *
- * The wireframe is explicit that its palette is "a neutral stand-in rather than
- * a brand palette". These tokens reproduce it exactly so the build matches the
- * approved structure; when the clinic brand palette arrives, change the hex
- * values here and nothing else needs touching.
+ * Source of truth: "Hannah London - Brand Reference for Developer" (Skalr,
+ * developer handoff), cross-checked against the live site's own CSS at
+ * hannahlondon.com. The wireframe's neutral stand-in palette that used to live
+ * here has been retired - the wireframe now governs STRUCTURE and COPY only.
  *
- * Two text colours are deliberately a shade darker than the wireframe:
- *   accent-ink  (#7A5C42 vs #8C6B4F) - the wireframe accent falls to 4.4:1 on
- *               the soft background, just under WCAG AA for small text
- *   muted       (#6E675F vs #8A8279) - the wireframe tone is 3.8:1 on white,
- *               and it is used for the legal and compliance micro-copy
- * The original tones remain available as `accent` and `muted-line` for borders
- * and decorative use, where contrast rules do not apply.
+ * ---------------------------------------------------------------------------
+ * Deliberate departures from the reference, and why
+ * ---------------------------------------------------------------------------
+ *
+ * The reference itself sets the precedent for this: it tells us NOT to copy the
+ * live site's primary button, which is #f1f1f1 with a white label and lands at
+ * 1.13:1. The same test applied to the rest of the palette turns up three more.
+ *
+ *   1. `copy-mute` #8e8e8e is 3.28:1 on white. The live site uses it for ALL
+ *      body copy and for headings. It is kept, but restricted to 24px+ (where
+ *      3:1 is the AA bar) and to decoration. Body copy uses `copy` #6d6e70 at
+ *      5.10:1, which the reference names as "Body text" anyway.
+ *
+ *   2. `copy` #6d6e70 is 4.37:1 on the `surface-sage` tint - a hair under AA.
+ *      Copy sitting directly on a tint steps to `sage-ink` #5f6a64 (4.82:1).
+ *      Both are reference colours; nothing here is invented.
+ *
+ *   3. `field` is #8e8e8e, not the reference's `line-soft` #c7c8c8. Input and
+ *      chip borders are non-text UI and need 3:1 under WCAG 1.4.11; #c7c8c8 is
+ *      about 1.9:1 on white. `line-soft` is retained for hairlines, where no
+ *      contrast rule applies.
+ *
+ *   4. `sage-deeper` #415451 is derived, roughly a 12% darkening of sage-deep.
+ *      The reference names sage-deep as the HOVER for a button fill we are
+ *      rejecting on contrast, so promoting sage-deep to the fill left the hover
+ *      state with nothing to point at.
+ *
+ * Measured contrast on white: sage-deep 6.05, sage-ink 5.63, copy 5.10,
+ * copy-mute 3.28, sage 2.62. White on sage-deep is also 6.05.
  */
 
 /** @type {import('tailwindcss').Config} */
@@ -25,100 +47,116 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        ink: '#1A1A1A',
-        // Named `copy` rather than `body` so `text-copy` (colour) never collides
-        // with `text-body` (the 13px font-size token below).
-        copy: '#4A4A4A',
-        line: '#E3E0DC',
-        soft: '#F6F4F1',
-        accent: '#8C6B4F',
-        'accent-ink': '#7A5C42',
-        'accent-soft': '#F0E8E0',
-        muted: '#6E675F',
-        'muted-line': '#8A8279',
-        field: '#D6D0C8',
-        ghost: '#B9B2A9',
-        // Status tones. Muted enough to sit in the warm neutral palette, and
-        // all three clear WCAG AA on white and on the soft background.
-        danger: '#991B1B',
-        warning: '#B45309',
-        success: '#3F6B54',
+        // Brand
+        'sage-deep': '#506766', // primary button fill, links, eyebrows
+        'sage-deeper': '#415451', // derived, hover only - see note 4
+        sage: '#96a39a',
+        'sage-light': '#9ba89f',
+        'sage-mid': '#8aa290',
+        'sage-ink': '#5f6a64', // headings, and body copy on tints
+
+        // Text and lines. Named `copy` rather than `body` so `text-copy`
+        // (colour) never collides with `text-body` (the font-size token).
+        copy: '#6d6e70',
+        'copy-mute': '#8e8e8e', // 24px+ or decoration ONLY - see note 1
+        line: '#ebebeb',
+        'line-soft': '#c7c8c8', // hairlines only, never a control border
+        field: '#8e8e8e', // see note 3
+
+        // Surfaces
+        'surface-grey': '#f1f1f1',
+        'surface-grey-50': '#edefef',
+        'surface-sage': '#e9efe8',
+        'surface-sage-2': '#ecf2ee',
+        'surface-mist': '#e8edee',
+        'surface-mist-2': '#e0ebea',
+
+        // Status. `warning` is 1.9:1 on white and is an accent rule or icon
+        // only - never text. The other three all clear AA on white.
+        success: '#13612e',
+        info: '#1159af',
+        error: '#b82105',
+        warning: '#f5a524',
       },
       fontFamily: {
-        sans: ['var(--font-sans)', 'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+        // Both self-hosted through next/font in app/layout.tsx. The reference
+        // supplies a <link> to fonts.googleapis.com instead - do NOT use it, the
+        // CSP in next.config.js sets font-src 'self' and the page would fall
+        // back to Georgia and Verdana.
+        serif: ['var(--font-gelasio)', 'Georgia', '"Times New Roman"', 'serif'],
+        sans: ['var(--font-nunito)', 'Verdana', 'Arial', 'sans-serif'],
       },
       fontSize: {
-        // Mobile scale, measured off the wireframe's own 390px frame. The
-        // wireframe sets line-height 1.5 on the phone screen, so anything
-        // without its own value inherits that.
-        eyebrow: ['0.625rem', { lineHeight: '1.5', letterSpacing: '0.2em' }], // 10px
-        hint: ['0.625rem', { lineHeight: '1.5' }], // 10px
-        micro: ['0.65625rem', { lineHeight: '1.45' }], // 10.5px
-        chip: ['0.71875rem', { lineHeight: '1.5' }], // 11.5px
-        caption: ['0.75rem', { lineHeight: '1.5' }], // 12px
-        question: ['0.78125rem', { lineHeight: '1.5' }], // 12.5px
-        body: ['0.8125rem', { lineHeight: '1.5' }], // 13px
-        'body-lg': ['0.875rem', { lineHeight: '1.5' }], // 14px
-        lead: ['1rem', { lineHeight: '1.55' }], // 16px, desktop body
-        h2: ['1.0625rem', { lineHeight: '1.5' }], // 17px
-        h3: ['1.0625rem', { lineHeight: '1.3' }], // 17px
-        price: ['1.4375rem', { lineHeight: '1.5' }], // 23px
-        h1: ['1.5625rem', { lineHeight: '1.15', letterSpacing: '-0.012em' }], // 25px
-        // Desktop step-ups.
-        'h1-lg': ['2.75rem', { lineHeight: '1.08', letterSpacing: '-0.02em' }], // 44px
-        'h2-lg': ['1.75rem', { lineHeight: '1.2', letterSpacing: '-0.01em' }], // 28px
-        'price-lg': ['2rem', { lineHeight: '1.1' }], // 32px
+        // The reference's own clamp values, verbatim. Its "typical use" column
+        // describes the marketing site; the mapping below is this campaign
+        // page's, which runs nine bands rather than three.
+        //
+        // `display` (fs-xxxl) and `xl` (fs-xl) are defined and available but
+        // unused: at a 36px floor, headings like "The same category of
+        // technology, without the usual price tag" run to four lines on a 390px
+        // viewport.
+        display: ['clamp(2.75rem, 0.489rem + 7.065vw, 6rem)', { lineHeight: '1.1' }],
+        xl: ['clamp(2.25rem, 1.728rem + 1.63vw, 3rem)', { lineHeight: '1.15' }],
+
+        h1: ['clamp(2.5rem, 1.456rem + 3.26vw, 4rem)', { lineHeight: '1.1' }], // 40 -> 64
+        h2: ['clamp(1.75rem, 1.576rem + 0.543vw, 2rem)', { lineHeight: '1.2' }], // 28 -> 32
+        price: ['clamp(1.75rem, 1.576rem + 0.543vw, 2rem)', { lineHeight: '1.1' }],
+        h3: ['clamp(1.1rem, 0.995rem + 0.326vw, 1.25rem)', { lineHeight: '1.35' }], // 17.6 -> 20
+        lead: ['clamp(1.1rem, 0.995rem + 0.326vw, 1.25rem)', { lineHeight: '1.55' }],
+
+        // Reference note 2: 16px is the floor on mobile, and 400 is the weight
+        // floor. This token is a fixed 1rem, not a clamp, so it can never go
+        // under that on any viewport.
+        body: ['1rem', { lineHeight: '1.6' }],
+
+        // Captions, micro-copy and the legal block.
+        micro: ['clamp(0.8rem, 0.73rem + 0.217vw, 0.9rem)', { lineHeight: '1.5' }],
+        eyebrow: [
+          'clamp(0.8rem, 0.73rem + 0.217vw, 0.9rem)',
+          { lineHeight: '1.5', letterSpacing: '0.2em' },
+        ],
       },
       maxWidth: {
-        page: '1120px',
-        prose: '68ch',
+        // The live site's own --content-width and --content-narrow-width.
+        page: '1290px',
+        prose: '842px',
       },
-      backgroundImage: {
-        // Diagonal hatch used for every media placeholder, straight from the
-        // wireframe. Costs zero network requests, which is why it is CSS.
-        placeholder:
-          'repeating-linear-gradient(45deg,#EFEBE6,#EFEBE6 9px,#E7E2DB 9px,#E7E2DB 18px)',
+      borderRadius: {
+        /*
+         * Three tiers, measured off the client's live site rather than picked.
+         * Their CSS declares 15px and 10px about equally often and 5px for
+         * controls, and the computed values on the rendered page line up:
+         *
+         *   15px  the call-back card, the practitioner band, the treatment
+         *         cards, and any photo given a frame of its own
+         *   10px  secondary boxes - the appointments modal, blog thumbnails,
+         *         video embeds, search inputs
+         *    5px  the call-back form's submit button
+         *
+         * Two details worth copying: a button sitting flush to a card edge gets
+         * NO radius there (it inherits the card's corner instead), and pill
+         * controls go fully round rather than taking a tier.
+         */
+        card: '15px',
+        tile: '10px',
+        control: '5px',
       },
       boxShadow: {
-        card: '0 1px 2px rgba(26,26,26,.04)',
-        bar: '0 -1px 12px rgba(26,26,26,.08)',
-        toast: '0 6px 24px rgba(26,26,26,.16)',
+        // Matches the live site's .request-call-back-col, retinted from black
+        // to sage so it reads warm against the palette rather than grey.
+        card: '5px 5px 5px rgba(80,103,102,.10)',
+        bar: '0 -1px 12px rgba(80,103,102,.12)',
+        toast: '0 6px 24px rgba(80,103,102,.18)',
       },
       keyframes: {
         'toast-in': {
           from: { opacity: '0', transform: 'translateY(8px) scale(.98)' },
           to: { opacity: '1', transform: 'translateY(0) scale(1)' },
         },
-        // The hero crossfade. Three frames, a 5s slot each, so a 15s cycle with
-        // a 0.9s dissolve. Frame one is not animated at all - it sits underneath
-        // and shows whenever nothing is stacked over it - so these percentages
-        // describe an overlay occupying the SECOND slot, and frame three reuses
-        // them with a 5s delay (see .hero-frame in globals.css).
-        //
-        //   0.0s - 5.0s   ( 0%    - 33.33%)  hidden, frame one showing
-        //   5.0s - 5.9s   (33.33% - 39.33%)  fade in over frame one
-        //   5.9s - 10.0s  (39.33% - 66.67%)  held
-        //  10.0s - 10.9s  (66.67% - 72.67%)  fade out, as the next frame fades in
-        //
-        // The fade out deliberately overlaps the next frame's fade in. Leaving a
-        // gap there flashes frame one between every pair, which reads as a fault
-        // rather than a dissolve.
-        'hero-cycle': {
-          '0%, 33.333%': { opacity: '0' },
-          '39.333%, 66.667%': { opacity: '1' },
-          '72.667%, 100%': { opacity: '0' },
-        },
       },
       animation: {
-        // The global prefers-reduced-motion rule in globals.css collapses both
-        // of these.
+        // The global prefers-reduced-motion rule in globals.css collapses this.
         'toast-in': 'toast-in 180ms cubic-bezier(.16,1,.3,1) both',
-        // Must be declared here and applied as `animate-hero-cycle`, not written
-        // as a bare `animation:` shorthand in globals.css. Tailwind only emits
-        // the @keyframes block when a matching animation utility is used, so
-        // referencing the name directly leaves the keyframes out of the
-        // stylesheet and the frames silently never move.
-        'hero-cycle': 'hero-cycle 15s linear infinite',
       },
     },
   },

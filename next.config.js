@@ -1,5 +1,5 @@
 /**
- * Next.js configuration for the Alteon Colindale site.
+ * Next.js configuration for the Hannah London Colindale site.
  *
  * Two things here are load-bearing for AWS Amplify and should not be removed:
  *

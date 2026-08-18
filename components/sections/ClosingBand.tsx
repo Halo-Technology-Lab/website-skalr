@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 import { CallLink } from '@/components/ui/CallLink';
-import { finalCta, FORM_ANCHOR, location } from '@/lib/content';
+import { finalCta, FORM_ANCHOR, hours, location } from '@/lib/content';
 
 /**
  * Location and final call to action (wireframe notes 9 and 10).
@@ -21,7 +21,7 @@ import { finalCta, FORM_ANCHOR, location } from '@/lib/content';
  */
 export function ClosingBand() {
   return (
-    <div className="lg:bg-soft lg:px-8 lg:py-20">
+    <div className="lg:bg-surface-sage lg:px-8 lg:py-20 lg:text-sage-ink">
       <div className="mx-auto max-w-page lg:grid lg:grid-cols-2 lg:items-center lg:gap-14">
         {/* Finding us */}
         <section
@@ -69,24 +69,46 @@ export function ClosingBand() {
 
           <p className="map-attribution">{location.map.attribution}</p>
 
-          <address className="mt-2.5 not-italic text-caption lg:mt-5 md:text-lead">
-            <strong className="font-bold text-ink">{location.venue}</strong>
+          <address className="mt-2.5 not-italic text-body lg:mt-5">
+            <strong className="font-semibold text-sage-ink">{location.venue}</strong>
             <br />
             {location.address}
             <br />
             {location.travel}
           </address>
+
+          {/*
+            Opening hours live here rather than beside the form, which is where
+            they would most directly back up "within five minutes during clinic
+            hours". The hero fold has about 30px of slack on a standard laptop
+            and another line there pushes the submit button under it - and a
+            visible submit button is worth more than a co-located detail. This is
+            also where someone actually looks for a clinic's hours.
+
+            Renders [TO CONFIRM] until the clinic confirms them: the brand
+            reference flags its own value as read off the booking calendar rather
+            than published, and hours that send someone to a shut door are worse
+            than no hours at all.
+          */}
+          <p className="mt-2.5 text-body">
+            <strong className="font-semibold text-sage-ink">{hours.label}</strong>{' '}
+            {hours.confirmed ? (
+              hours.value
+            ) : (
+              <span className="text-sage-deep">{hours.placeholder}</span>
+            )}
+          </p>
         </section>
 
-        {/* Ready to see if Alteon suits your skin? */}
+        {/* Ready to see if the treatment suits your skin? */}
         <section
           aria-labelledby="closing-heading"
-          className="mx-auto w-full bg-soft px-[18px] py-5 text-center md:max-w-2xl md:px-6 md:py-14 lg:max-w-none lg:bg-transparent lg:p-0 lg:text-left"
+          className="mx-auto w-full bg-surface-sage px-[18px] py-5 text-center text-sage-ink md:max-w-2xl md:px-6 md:py-14 lg:max-w-none lg:bg-transparent lg:p-0 lg:text-left"
         >
           <h2 id="closing-heading" className="section-heading">
             {finalCta.heading}
           </h2>
-          <p className="mt-1.5 text-caption lg:mt-4 md:text-lead">{finalCta.body}</p>
+          <p className="mt-1.5 text-body lg:mt-4">{finalCta.body}</p>
 
           <div className="lg:flex lg:max-w-md lg:gap-4">
             <a href={`#${FORM_ANCHOR}`} className="btn mt-3 lg:mt-8">

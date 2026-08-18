@@ -85,7 +85,7 @@ export async function POST(request: Request) {
             : {}),
         },
         body: JSON.stringify({
-          source: 'alteon-colindale-landing',
+          source: 'hannah-london-colindale-landing',
           received_at: receivedAt,
           first_name: lead.firstName,
           phone: lead.phone,
@@ -146,7 +146,7 @@ export async function POST(request: Request) {
           userAgent: request.headers.get('user-agent') ?? undefined,
         },
         customData: {
-          content_name: 'Alteon landing page',
+          content_name: 'Hannah London landing page',
           concern: lead.concern,
           preferred_time: lead.timing,
         },

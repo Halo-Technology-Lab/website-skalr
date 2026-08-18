@@ -28,7 +28,10 @@ export function Section({
       aria-labelledby={labelledBy}
       className={cn(
         'scroll-mt-14 border-b border-line px-[18px] py-5 md:border-b-0 md:px-6 md:py-14 lg:scroll-mt-20 lg:px-8 lg:py-20',
-        soft ? 'bg-soft' : 'bg-white',
+        // Tinted bands step the inherited body colour to sage-ink. `copy`
+        // (#6d6e70) measures 4.37:1 on surface-sage, a hair under AA, so every
+        // paragraph that merely inherits would fail on this background.
+        soft ? 'bg-surface-sage text-sage-ink' : 'bg-white',
         className
       )}
     >

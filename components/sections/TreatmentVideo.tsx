@@ -8,14 +8,16 @@ import { cn } from '@/lib/utils';
 const { video } = hero.media;
 
 /**
- * The hero treatment clip, with a custom play and pause control.
+ * The practitioner treatment clip, with a custom play and pause control.
  *
- * This is the fourth client component on the page, and CLAUDE.md says the list is
- * closed, so it is worth saying why it earns the exception: a play/pause control
- * has to know whether the video is playing, and there is no way to read or change
- * that from CSS. It is the whole cost - about 1kB - and it only loads when the
- * hero is set to the video (see HERO_MEDIA in Hero.tsx). Set it to the stills and
- * this file is never imported, so the page ships no JavaScript for the hero at all.
+ * It used to be the hero. The client's brand film took that slot in the rebrand,
+ * so this now sits in the How it works band, which is arguably a better home for
+ * it: a practitioner explaining the mechanism, beside the three steps describing
+ * the same thing.
+ *
+ * A play/pause control has to know whether the video is playing, and there is no
+ * way to read or change that from CSS, which is what earns this its exception to
+ * the short client-component list. About 1kB.
  *
  * Two behaviours worth knowing about:
  *
@@ -27,7 +29,7 @@ const { video } = hero.media;
  *    second clip starting by itself is exactly what that setting is for. They get
  *    the poster frame and a play button.
  */
-export function HeroVideo() {
+export function TreatmentVideo() {
   const [playing, setPlaying] = useState(false);
   const [reveal, setReveal] = useState(false);
 
@@ -74,14 +76,14 @@ export function HeroVideo() {
 
   return (
     <div
-      className="hero-video"
+      className="treatment-video"
       onPointerEnter={() => setReveal(true)}
       onPointerLeave={() => setReveal(false)}
       onPointerDown={flashControl}
     >
       <video
         ref={videoRef}
-        className="hero-video-el"
+        className="treatment-video-el"
         src={video.src}
         poster={video.poster}
         width={video.width}
@@ -103,10 +105,10 @@ export function HeroVideo() {
         onClick={toggle}
         onFocus={() => setReveal(true)}
         onBlur={() => setReveal(false)}
-        className={cn('hero-video-toggle', (!playing || reveal) && 'is-visible')}
+        className={cn('treatment-video-toggle', (!playing || reveal) && 'is-visible')}
       >
         <span className="sr-only">{playing ? video.pause : video.play}</span>
-        <span aria-hidden="true" className="hero-video-badge">
+        <span aria-hidden="true" className="treatment-video-badge">
           {playing ? <PauseIcon /> : <PlayIcon />}
         </span>
       </button>

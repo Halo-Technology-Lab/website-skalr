@@ -81,7 +81,7 @@ export function useToasts() {
 const TONE_STYLES: Record<ToastTone, { border: string; text: string }> = {
   success: { border: 'border-l-success', text: 'text-success' },
   warning: { border: 'border-l-warning', text: 'text-warning' },
-  error: { border: 'border-l-danger', text: 'text-danger' },
+  error: { border: 'border-l-error', text: 'text-error' },
 };
 
 /**
@@ -100,7 +100,7 @@ export function ToastViewport({
     <div
       role="status"
       aria-live="polite"
-      className="pointer-events-none fixed inset-x-0 bottom-[calc(76px+env(safe-area-inset-bottom))] z-50 flex flex-col items-center gap-2 px-[18px] lg:bottom-6 lg:left-auto lg:right-6 lg:items-end lg:px-0"
+      className="pointer-events-none fixed inset-x-0 bottom-[calc(86px+env(safe-area-inset-bottom))] z-50 flex flex-col items-center gap-2 px-[18px] lg:bottom-6 lg:left-auto lg:right-6 lg:items-end lg:px-0"
     >
       {toasts.map((toast) => {
         const tone = TONE_STYLES[toast.tone];
@@ -108,7 +108,7 @@ export function ToastViewport({
           <div
             key={toast.id}
             className={cn(
-              'pointer-events-auto flex w-full max-w-sm animate-toast-in items-start gap-2.5 rounded-md border border-line border-l-[3px] bg-white p-3 shadow-toast',
+              'pointer-events-auto flex w-full max-w-sm animate-toast-in items-start gap-2.5 rounded-control border border-line border-l-[3px] bg-white p-3 shadow-toast',
               tone.border,
             )}
           >
@@ -118,11 +118,11 @@ export function ToastViewport({
             />
 
             <div className="min-w-0 flex-1">
-              <p className={cn('text-caption font-bold', tone.text)}>
+              <p className={cn('text-micro font-semibold', tone.text)}>
                 {toast.title}
               </p>
               {toast.message && (
-                <p className="mt-0.5 text-micro text-copy md:text-caption">
+                <p className="mt-0.5 text-micro text-copy">
                   {toast.message}
                 </p>
               )}
@@ -132,7 +132,7 @@ export function ToastViewport({
               type="button"
               onClick={() => onDismiss(toast.id)}
               aria-label="Dismiss"
-              className="-m-1 flex h-9 w-9 flex-none items-center justify-center rounded text-muted transition-colors hover:text-ink"
+              className="-m-1 flex h-9 w-9 flex-none items-center justify-center rounded text-copy transition-colors hover:text-sage-deep"
             >
               <svg
                 viewBox="0 0 24 24"

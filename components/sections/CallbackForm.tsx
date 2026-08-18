@@ -216,7 +216,7 @@ export function CallbackForm() {
           className="scroll-mt-20 outline-none lg:scroll-mt-28"
         >
           <h2 className="section-heading">{copy.success.heading}</h2>
-          <p className="mt-2 md:text-lead">{copy.success.body}</p>
+          <p className="mt-2 text-lead">{copy.success.body}</p>
           <p className="micro">{copy.success.micro}</p>
         </div>
       </FormShell>
@@ -225,7 +225,7 @@ export function CallbackForm() {
         <h2 id={`${uid}-heading`} className="section-heading">
           {copy.heading}
         </h2>
-        <p className="mt-2 text-caption md:text-lead">{copy.intro}</p>
+        <p className="mt-2 text-body">{copy.intro}</p>
 
         <form onSubmit={handleSubmit} noValidate className="mt-3.5">
           {/* Honeypot. Hidden from people and from assistive tech, visible to bots. */}
@@ -257,39 +257,45 @@ export function CallbackForm() {
             }}
           />
 
-          <TextField
-            id={fieldId('firstName')}
-            label={copy.firstNameLabel}
-            placeholder={copy.firstNamePlaceholder}
-            value={values.firstName}
-            error={errors.firstName}
-            errorId={errorId('firstName')}
-            autoComplete="given-name"
-            onChange={(value) => setValue('firstName', value)}
-            onBlur={() => validateField('firstName')}
-            inputRef={(el) => {
-              fieldRefs.current.firstName = el;
-            }}
-          />
+          {/* Paired at lg. Stacked, the form runs 165px past a 836px fold and the
+              submit button lands below it, which defeats the point of putting
+              the form in the hero at all. Side by side reclaims a whole field
+              row. They stay stacked on mobile, where the card has the height. */}
+          <div className="lg:grid lg:grid-cols-2 lg:gap-3">
+            <TextField
+              id={fieldId('firstName')}
+              label={copy.firstNameLabel}
+              placeholder={copy.firstNamePlaceholder}
+              value={values.firstName}
+              error={errors.firstName}
+              errorId={errorId('firstName')}
+              autoComplete="given-name"
+              onChange={(value) => setValue('firstName', value)}
+              onBlur={() => validateField('firstName')}
+              inputRef={(el) => {
+                fieldRefs.current.firstName = el;
+              }}
+            />
 
-          <TextField
-            id={fieldId('phone')}
-            label={copy.phoneLabel}
-            placeholder={copy.phonePlaceholder}
-            hint={copy.phoneHint}
-            hintId={`${uid}-phone-hint`}
-            value={values.phone}
-            error={errors.phone}
-            errorId={errorId('phone')}
-            type="tel"
-            inputMode="numeric"
-            autoComplete="tel"
-            onChange={(value) => setValue('phone', value)}
-            onBlur={() => validateField('phone')}
-            inputRef={(el) => {
-              fieldRefs.current.phone = el;
-            }}
-          />
+            <TextField
+              id={fieldId('phone')}
+              label={copy.phoneLabel}
+              placeholder={copy.phonePlaceholder}
+              hint={copy.phoneHint}
+              hintId={`${uid}-phone-hint`}
+              value={values.phone}
+              error={errors.phone}
+              errorId={errorId('phone')}
+              type="tel"
+              inputMode="numeric"
+              autoComplete="tel"
+              onChange={(value) => setValue('phone', value)}
+              onBlur={() => validateField('phone')}
+              inputRef={(el) => {
+                fieldRefs.current.phone = el;
+              }}
+            />
+          </div>
 
           <TextField
             id={fieldId('email')}
@@ -321,7 +327,7 @@ export function CallbackForm() {
             }}
           />
 
-          <div className="mt-[11px]">
+          <div className="mt-[11px] lg:mt-2">
             <div className="flex items-start gap-2">
               <input
                 id={fieldId('consent')}
@@ -336,11 +342,11 @@ export function CallbackForm() {
                 ref={(el) => {
                   fieldRefs.current.consent = el;
                 }}
-                className="mt-px h-6 w-6 flex-none cursor-pointer rounded-none border border-ghost accent-ink"
+                className="mt-px h-6 w-6 flex-none cursor-pointer rounded-[3px] border border-field accent-sage-deep"
               />
               <label
                 htmlFor={fieldId('consent')}
-                className="cursor-pointer text-micro text-muted md:text-caption"
+                className="cursor-pointer text-micro text-copy"
               >
                 {copy.consent}
               </label>
@@ -357,9 +363,9 @@ export function CallbackForm() {
           {status === 'error' && (
             <div
               role="alert"
-              className="mt-3 border border-danger/30 bg-danger/[.04] px-3 py-2 text-micro text-danger md:text-caption"
+              className="mt-3 rounded-tile border border-error/30 bg-error/[.04] px-3 py-2 text-micro text-error"
             >
-              <strong className="block font-bold">
+              <strong className="block font-semibold">
                 {copy.failure.heading}
               </strong>
               {copy.failure.body}
@@ -398,8 +404,8 @@ function FormShell({ children }: { children: React.ReactNode }) {
     <div
       id={FORM_ANCHOR}
       className={cn(
-        'scroll-mt-14 border-b border-line bg-soft px-[18px] py-5 md:px-6 md:py-12',
-        'lg:sticky lg:top-24 lg:scroll-mt-24 lg:rounded-lg lg:border lg:border-line lg:bg-white lg:px-7 lg:py-7 lg:shadow-card',
+        'scroll-mt-14 border-b border-line bg-surface-sage px-[18px] py-5 md:px-6 md:py-12',
+        'lg:sticky lg:top-24 lg:scroll-mt-24 lg:rounded-card lg:border lg:border-line lg:bg-white lg:px-7 lg:py-5 lg:shadow-card',
       )}
     >
       <div className="mx-auto w-full md:max-w-2xl lg:max-w-none">
@@ -429,7 +435,7 @@ function ChipGroup({
   firstRef: (el: HTMLInputElement | null) => void;
 }) {
   return (
-    <fieldset className="mt-[11px] first:mt-0">
+    <fieldset className="mt-[11px] first:mt-0 lg:mt-2">
       <legend className="field-label">{legend}</legend>
       <div className="mb-1 flex flex-wrap gap-1.5">
         {options.map((option, index) => {
@@ -480,6 +486,7 @@ function TextField({
   onChange,
   onBlur,
   inputRef,
+  className,
 }: {
   id: string;
   label: string;
@@ -495,13 +502,14 @@ function TextField({
   onChange: (value: string) => void;
   onBlur: () => void;
   inputRef: (el: HTMLInputElement | null) => void;
+  className?: string;
 }) {
   const describedBy = [hint ? hintId : null, error ? errorId : null]
     .filter(Boolean)
     .join(' ');
 
   return (
-    <div className="mt-[11px]">
+    <div className={cn('mt-[11px] lg:mt-2', className)}>
       <label htmlFor={id} className="field-label">
         {label}
       </label>
