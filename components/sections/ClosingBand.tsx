@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 import { CallLink } from '@/components/ui/CallLink';
-import { finalCta, FORM_ANCHOR, hours, location } from '@/lib/content';
+import { finalCta, FORM_ANCHOR, location } from '@/lib/content';
 
 /**
  * Location and final call to action (wireframe notes 9 and 10).
@@ -76,28 +76,6 @@ export function ClosingBand() {
             <br />
             {location.travel}
           </address>
-
-          {/*
-            Opening hours live here rather than beside the form, which is where
-            they would most directly back up "within five minutes during clinic
-            hours". The hero fold has about 30px of slack on a standard laptop
-            and another line there pushes the submit button under it - and a
-            visible submit button is worth more than a co-located detail. This is
-            also where someone actually looks for a clinic's hours.
-
-            Renders [TO CONFIRM] until the clinic confirms them: the brand
-            reference flags its own value as read off the booking calendar rather
-            than published, and hours that send someone to a shut door are worse
-            than no hours at all.
-          */}
-          <p className="mt-2.5 text-body">
-            <strong className="font-semibold text-sage-ink">{hours.label}</strong>{' '}
-            {hours.confirmed ? (
-              hours.value
-            ) : (
-              <span className="text-sage-deep">{hours.placeholder}</span>
-            )}
-          </p>
         </section>
 
         {/* Ready to see if the treatment suits your skin? */}
