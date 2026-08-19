@@ -156,6 +156,9 @@ export function CallbackForm() {
           fbp,
           fbc,
           attribution: captureAttribution(),
+          // Origin and path only: the campaign parameters travel in their own
+          // fields, and the CRM record reads better without the query string.
+          pageUrl: `${window.location.origin}${window.location.pathname}`,
           elapsedMs: Date.now() - mountedAt.current,
           website: '', // honeypot, always empty for people
         }),

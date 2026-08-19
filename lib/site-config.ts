@@ -82,6 +82,40 @@ export const siteConfig = {
 
   /** Meta Pixel ID. The pixel is not loaded at all when unset. */
   metaPixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID,
+
+  /**
+   * Google Tag Manager container. Nothing renders when this is undefined.
+   *
+   * Unlike the two IDs above, the container ID is baked in rather than left to
+   * the Amplify console: the client supplied it for this page specifically, and
+   * a tag that silently never loads because a var went unset is the more likely
+   * and more expensive failure. It is scoped to production builds so `npm run
+   * dev` does not push dev traffic into the client's container, and an explicit
+   * NEXT_PUBLIC_GTM_ID still wins - set it to test locally, or to point a
+   * preview build at a different container.
+   */
+  gtmId:
+    process.env.NEXT_PUBLIC_GTM_ID ??
+    (process.env.NODE_ENV === 'production' ? 'GTM-T5WSFDZM' : undefined),
+
+  /**
+   * CallRail's dynamic number insertion script. Nothing loads when undefined.
+   *
+   * This rewrites the phone numbers on the page to per-source tracking numbers,
+   * so `clinic.phoneDisplay` and `clinic.phoneHref` above are what a visitor
+   * sees only when the swap does not run - which is the correct fallback, they
+   * are the clinic's real number.
+   *
+   * Baked in and scoped to production for the same reason as gtmId, and
+   * NEXT_PUBLIC_CALLRAIL_SWAP_SRC still wins. The client supplied it as a
+   * protocol-relative URL; it is pinned to https here because the CSP names the
+   * host with a scheme and the page is https-only anyway.
+   */
+  callRailSwapSrc:
+    process.env.NEXT_PUBLIC_CALLRAIL_SWAP_SRC ??
+    (process.env.NODE_ENV === 'production'
+      ? 'https://cdn.callrail.com/companies/798426275/2e44d7490dd0319ab565/12/swap.js'
+      : undefined),
 } as const;
 
 export type SiteConfig = typeof siteConfig;

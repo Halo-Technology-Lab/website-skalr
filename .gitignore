@@ -24,6 +24,9 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+# Netlify (build output written by the Next.js Runtime, and CLI site linkage)
+.netlify
+
 # Amplify
 .amplify-hosting
 amplify/\#current-cloud-backend

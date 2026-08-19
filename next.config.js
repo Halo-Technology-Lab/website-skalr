@@ -75,6 +75,8 @@ const nextConfig = {
       'https://www.googletagmanager.com',
       // Meta Pixel loader.
       'https://connect.facebook.net',
+      // CallRail's number-swap script, and the extra files it pulls in itself.
+      'https://cdn.callrail.com',
     ]
       .filter(Boolean)
       .join(' ');
@@ -89,6 +91,9 @@ const nextConfig = {
       // Meta Pixel beacons.
       'https://www.facebook.com',
       'https://connect.facebook.net',
+      // CallRail resolves the number to show and reports the session back; it
+      // uses more than one subdomain, so this has to be a wildcard.
+      'https://*.callrail.com',
     ]
       .filter(Boolean)
       .join(' ');
@@ -118,6 +123,9 @@ const nextConfig = {
               "img-src 'self' data: https: blob:",
               "media-src 'self'",
               "font-src 'self'",
+              // Google Tag Manager's <noscript> fallback iframe. See
+              // components/analytics/GoogleTagManager.tsx.
+              'frame-src https://www.googletagmanager.com',
               `connect-src ${connectSrc}`,
               "object-src 'none'",
               "base-uri 'self'",

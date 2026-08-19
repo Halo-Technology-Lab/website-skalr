@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import { Gelasio, Nunito_Sans } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
+import { GoogleTagManager } from '@/components/analytics/GoogleTagManager';
+import { CallRailSwap } from '@/components/analytics/CallRailSwap';
 import { MetaPixel } from '@/components/analytics/MetaPixel';
 import { siteConfig } from '@/lib/site-config';
 
@@ -110,6 +112,8 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen" suppressHydrationWarning>
+        {/* Must stay the first thing in <body> - see the component. */}
+        <GoogleTagManager />
         {/*
           Sets the header's state BEFORE first paint.
 
@@ -154,6 +158,7 @@ export default function RootLayout({
           </>
         )}
         <MetaPixel />
+        <CallRailSwap />
       </body>
     </html>
   );

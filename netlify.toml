@@ -1,0 +1,60 @@
+# Netlify build configuration for the Hannah London Colindale site.
+#
+# This site was originally built for AWS Amplify (see amplify.yml, which is
+# still the live host). The two hosts want different things from a Next.js app,
+# and the difference is why a Netlify deploy 404s without this file:
+#
+#   - Amplify serves the raw `.next` directory as the build artifact.
+#   - Netlify needs the Next.js Runtime to turn `.next` into a static asset set
+#     plus serverless functions. Point Netlify at `.next` with no runtime and
+#     there is no index.html at the root, so every path returns Netlify's own
+#     404 page - including /, /robots.txt and /_next/static.
+#
+# The runtime is normally auto-installed when Netlify detects Next.js. It is
+# declared explicitly here, and pinned in devDependencies, so the deploy does
+# not depend on that detection and the version cannot move under us.
+
+[build]
+  command = "npm run build"
+  # The Next.js Runtime reads .next and rewrites it into the deploy. Do not
+  # change this to `out` - that is for `output: 'export'`, which this site is
+  # not (app/api/lead/route.ts needs a server).
+  publish = ".next"
+
+[build.environment]
+  # Matches .nvmrc and amplify.yml. Next 14.2 needs 18.17+.
+  NODE_VERSION = "20"
+  # Fail the build on a lint or type error rather than shipping a broken page.
+  NEXT_TELEMETRY_DISABLED = "1"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Security headers and the CSP stay in next.config.js: they apply to HTML, and
+# HTML on Netlify is served by the Next.js server handler, which applies them.
+#
+# Caching is the exception. next.config.js sets a year of immutable cache on
+# /images, /fonts and /video, but those directories are copied into the deploy
+# as plain CDN assets and never touch the Next server, so its headers() rules
+# never run for them and Netlify falls back to must-revalidate. That undoes the
+# whole point of pre-optimising the pack - the hero clip is the largest asset on
+# the page and would be revalidated on every visit. So the three rules are
+# mirrored here. They must stay in next.config.js too; Amplify reads that file.
+#
+# Safe because the filenames under these directories are stable and only change
+# when the asset pack is regenerated, at which point the filename changes too.
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/video/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
