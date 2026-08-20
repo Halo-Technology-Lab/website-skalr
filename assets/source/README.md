@@ -18,26 +18,29 @@ patient-2-before   patient-2-after
 patient-3-before   patient-3-after
 ```
 
-Frame `1` of each subject is the front-on view. Note that the angle numbering in
-the delivered pack is **not** consistent between subjects, so do not assume frame
-`2` means the same thing for two different people.
+The current mapping, from the pack delivered 20 August 2026 as
+`Skalr/before after/`:
 
-The current mapping, from the pack delivered 17 August 2026:
+| Stem | Source in the pack | Size |
+|---|---|---|
+| `patient-1-before` | `before-1.jpeg` | 1254x1254 |
+| `patient-1-after` | `after-1.jpeg` | 1254x1254 |
+| `patient-2-before` | `before-2.jpeg` | 1254x1254 |
+| `patient-2-after` | `after-2.jpeg` | 1107x1107 |
+| `patient-3-before` | `before-3.jpeg` | 1254x1254 |
+| `patient-3-after` | `after-3.jpeg` | 1254x1254 |
 
-| Stem | Source in the pack |
-|---|---|
-| `patient-1-before` | `Chloe/Before/cb1.png` |
-| `patient-1-after` | `Chloe/After/ca1.png` |
-| `patient-2-before` | `Elena/before/eb1.png` |
-| `patient-2-after` | `Elena/after/ea1.png` |
-| `patient-3-before` | `debs/Before/db1.jpg` |
-| `patient-3-after` | `debs/After/ad1.jpg` |
+This pack is pre-paired and pre-numbered, so the mapping is one to one and there
+are no subject names to strip. It supersedes the pack of 17 August 2026, which
+was delivered as per-subject folders of numbered angles.
 
-Subject names appear here only to make the pack traceable. They deliberately do
-not appear in output filenames, alt text or page copy, because those are public.
+Two things about it that matter downstream:
 
-`debs` also has a `v2` folder in the pack. Do not use it: its "after" reads worse
-than its own "before".
+- The frames are **angled, not front-on**. Patients one and two are
+  three-quarter views, patient three is a side view. The alt text in
+  `lib/content.ts` describes them as such.
+- `after-2.jpeg` is 1107px where everything else is 1254px, so the 1000px-tall
+  results crop only just fits inside it.
 
 ## The hero clip
 

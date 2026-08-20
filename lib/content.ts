@@ -232,32 +232,37 @@ export const beforeAfter = {
    * and consent to publish a photograph is not consent to publish a name. If the
    * consent does cover names, they can be added here and nowhere else.
    *
-   * Frames are the front-on view of each subject, cropped 4:5 by
-   * scripts/optimize-images.mjs. Nothing is retouched, rescaled or colour
-   * corrected - the caption below claims as much, and normalising one half of a
-   * pair to match the other would make that claim untrue.
+   * The pack of 20 August 2026 is angled rather than front-on: patients one and
+   * two are three-quarter views and patient three is a side view. The alt text
+   * says so, because "facing the camera" was the old pack and describing a
+   * picture as something it is not is worse than not describing it.
+   *
+   * Frames are cropped 4:5 by scripts/optimize-images.mjs. Nothing is
+   * retouched, rescaled or colour corrected - the caption below claims as much,
+   * and normalising one half of a pair to match the other would make that claim
+   * untrue.
    */
   pairs: [
     {
       id: 'pair-1',
       before: '/images/results/patient-1-before.webp',
       after: '/images/results/patient-1-after.webp',
-      beforeAlt: 'Patient one before treatment, facing the camera',
-      afterAlt: 'Patient one after treatment, facing the camera',
+      beforeAlt: 'Patient one before treatment, a three-quarter view of the face',
+      afterAlt: 'Patient one after treatment, a three-quarter view of the face',
     },
     {
       id: 'pair-2',
       before: '/images/results/patient-2-before.webp',
       after: '/images/results/patient-2-after.webp',
-      beforeAlt: 'Patient two before treatment, facing the camera',
-      afterAlt: 'Patient two after treatment, facing the camera',
+      beforeAlt: 'Patient two before treatment, a three-quarter view of the face',
+      afterAlt: 'Patient two after treatment, a three-quarter view of the face',
     },
     {
       id: 'pair-3',
       before: '/images/results/patient-3-before.webp',
       after: '/images/results/patient-3-after.webp',
-      beforeAlt: 'Patient three before treatment, facing the camera',
-      afterAlt: 'Patient three after treatment, facing the camera',
+      beforeAlt: 'Patient three before treatment, a side view of the face',
+      afterAlt: 'Patient three after treatment, a side view of the face',
     },
   ],
   /** Intrinsic size of every results image. Set by scripts/optimize-images.mjs. */
